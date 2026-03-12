@@ -1,0 +1,1128 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width,initial-scale=1.0"/>
+<title>Dialogue Design — General Assembly BAA 12.0</title>
+<link href="https://fonts.googleapis.com/css2?family=Barlow:ital,wght@0,400;0,500;0,600;0,700;0,800;0,900&family=Barlow+Condensed:wght@600;700;800;900&family=JetBrains+Mono:wght@400;500;700&display=swap" rel="stylesheet"/>
+<style>
+:root{
+  --black:#0d0d0d;--black2:#1a1a1a;--black3:#252525;--black4:#333;
+  --line:#2e2e2e;--line2:#404040;--gray-dk:#555;--gray:#888;
+  --gray-lt:#bbb;--white:#fff;
+  --GA-red:#e8333a;--GA-red2:#ff4a50;
+  --yellow:#f5c518;--green:#22c55e;--blue:#3b82f6;--purple:#a855f7;
+  --teal:#14b8a6;--orange:#f97316;
+  --r:4px;--r-lg:10px;
+}
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+html{scroll-behavior:smooth}
+body{font-family:'Barlow',sans-serif;background:var(--black);color:var(--white);font-size:16px;line-height:1.6;min-height:100vh}
+::-webkit-scrollbar{width:6px}::-webkit-scrollbar-track{background:var(--black2)}::-webkit-scrollbar-thumb{background:var(--black4);border-radius:3px}
+header{position:sticky;top:0;z-index:500;background:var(--black);border-bottom:2px solid var(--GA-red);display:flex;align-items:stretch;height:58px}
+.ga-logo{display:flex;align-items:center;gap:10px;padding:0 20px;border-right:1px solid var(--line);flex-shrink:0;cursor:pointer}
+.ga-mark{width:32px;height:32px;background:var(--GA-red);display:flex;align-items:center;justify-content:center;font-family:'Barlow Condensed',sans-serif;font-size:14px;font-weight:800;color:#fff;border-radius:2px}
+.ga-name{font-family:'Barlow Condensed',sans-serif;font-size:13px;font-weight:700;letter-spacing:.06em;color:var(--gray-lt);text-transform:uppercase;line-height:1.2}
+.ga-name span{display:block;font-size:10px;color:var(--gray);font-weight:600}
+.tab-bar{display:flex;align-items:stretch;overflow-x:auto;flex:1;scrollbar-width:none}
+.tab-bar::-webkit-scrollbar{display:none}
+.tab{display:flex;align-items:center;padding:0 13px;font-family:'Barlow',sans-serif;font-size:12px;font-weight:600;color:var(--gray);cursor:pointer;white-space:nowrap;border-bottom:3px solid transparent;transition:color .15s,border-color .15s;position:relative;top:2px}
+.tab:hover{color:#fff}.tab.active{color:#fff;border-bottom-color:var(--GA-red)}
+.hd-end{display:flex;align-items:center;padding:0 18px;border-left:1px solid var(--line);flex-shrink:0}
+.prog-chip{background:var(--GA-red);color:#fff;font-family:'JetBrains Mono',monospace;font-size:11px;padding:4px 12px;border-radius:20px;white-space:nowrap}
+.section{display:none}.section.active{display:block}
+.wrap{max-width:880px;margin:0 auto;padding:48px 24px 80px}
+.eyebrow{font-family:'Barlow Condensed',sans-serif;font-size:11px;font-weight:700;letter-spacing:.18em;text-transform:uppercase;color:var(--GA-red);margin-bottom:10px;display:block}
+h1{font-family:'Barlow Condensed',sans-serif;font-size:clamp(2.4rem,6vw,3.8rem);font-weight:900;line-height:1.05;color:#fff;margin-bottom:16px}
+h1 .red{color:var(--GA-red)}
+h2{font-family:'Barlow Condensed',sans-serif;font-size:clamp(1.6rem,4vw,2.3rem);font-weight:800;line-height:1.1;color:#fff;margin-bottom:8px}
+h2 .red{color:var(--GA-red)}
+.lead{font-size:1.02rem;color:var(--gray-lt);line-height:1.72;margin-bottom:28px;max-width:660px}
+.hr{height:1px;background:var(--line);margin:36px 0}
+.btn{display:inline-flex;align-items:center;gap:8px;padding:12px 28px;border-radius:var(--r);font-family:'Barlow',sans-serif;font-size:.95rem;font-weight:700;cursor:pointer;border:2px solid transparent;transition:all .15s;white-space:nowrap}
+.btn-red{background:var(--GA-red);color:#fff;border-color:var(--GA-red)}.btn-red:hover{background:var(--GA-red2);transform:translateY(-1px)}
+.btn-ghost{background:transparent;color:var(--gray-lt);border:2px solid var(--line2);padding:10px 20px;font-size:.88rem;font-weight:600;cursor:pointer;border-radius:var(--r);transition:all .15s}.btn-ghost:hover{border-color:var(--gray);color:#fff}
+.btn-green{background:var(--green);color:var(--black);border:none;border-radius:var(--r);padding:11px 24px;font-size:.9rem;font-weight:700;cursor:pointer;transition:all .15s}
+.card{background:var(--black2);border:1px solid var(--line);border-radius:var(--r-lg);padding:28px;margin-bottom:16px}
+.card-rb{border-top:3px solid var(--GA-red)}
+.callout{border-radius:var(--r-lg);padding:14px 18px;margin:12px 0;font-size:.88rem;line-height:1.65}
+.callout-tip{background:rgba(59,130,246,.08);border:1px solid rgba(59,130,246,.2);color:#93c5fd}
+.callout-warn{background:rgba(245,197,24,.08);border:1px solid rgba(245,197,24,.2);color:#fde68a}
+.callout-success{background:rgba(34,197,94,.08);border:1px solid rgba(34,197,94,.2);color:#86efac}
+.callout-purple{background:rgba(168,85,247,.08);border:1px solid rgba(168,85,247,.25);color:#d8b4fe}
+.callout strong{color:#fff}
+@keyframes fadeUp{from{opacity:0;transform:translateY(18px)}to{opacity:1;transform:translateY(0)}}
+.a1{animation:fadeUp .35s ease both}.a2{animation:fadeUp .35s .1s ease both}.a3{animation:fadeUp .35s .2s ease both}
+.hero-kicker{display:inline-flex;align-items:center;gap:8px;background:var(--black3);border:1px solid var(--line);border-radius:var(--r);padding:6px 14px;margin-bottom:20px;font-size:12px;font-weight:600;color:var(--gray-lt);letter-spacing:.04em}
+.hero-kicker .dot{width:8px;height:8px;background:var(--GA-red);border-radius:50%}
+.roadmap{display:flex;flex-direction:column}
+.rm-item{display:flex;align-items:flex-start;gap:16px;padding:14px 0;border-bottom:1px solid var(--line)}
+.rm-item:last-child{border-bottom:none}
+.rm-dot{width:36px;height:36px;border-radius:50%;flex-shrink:0;display:flex;align-items:center;justify-content:center;font-family:'Barlow Condensed',sans-serif;font-size:13px;font-weight:700;border:2px solid var(--line);background:var(--black3);color:var(--gray);transition:all .25s}
+.rm-dot.done{background:var(--green);border-color:var(--green);color:var(--black)}
+.rm-label{font-size:.95rem;font-weight:600;color:var(--gray);padding-top:6px}
+.rm-label.done{color:var(--green)}
+.rm-sub{font-size:.8rem;color:var(--gray-dk);margin-top:2px}
+
+/* ── CHAT ── */
+.chat-shell{background:#0a0a0a;border:1px solid var(--line);border-radius:var(--r-lg);overflow:hidden;display:flex;flex-direction:column}
+.chat-topbar{background:var(--black3);padding:10px 16px;display:flex;align-items:center;gap:10px;border-bottom:1px solid var(--line);flex-shrink:0}
+.online-dot{width:9px;height:9px;border-radius:50%;background:var(--green);box-shadow:0 0 6px rgba(34,197,94,.5)}
+.agent-name{font-family:'JetBrains Mono',monospace;font-size:.82rem;color:var(--gray-lt)}
+.persona-badge{margin-left:auto;font-size:.68rem;font-weight:700;padding:2px 9px;border-radius:3px;background:var(--black2);color:var(--gray-dk);letter-spacing:.06em;text-transform:uppercase}
+.msgs{flex:1;overflow-y:auto;padding:14px;display:flex;flex-direction:column;gap:10px;min-height:0}
+.msgs::-webkit-scrollbar{width:3px}.msgs::-webkit-scrollbar-thumb{background:var(--black4)}
+@keyframes popIn{from{opacity:0;transform:translateY(5px)}to{opacity:1;transform:translateY(0)}}
+.msg{display:flex;gap:9px;align-items:flex-end;animation:popIn .2s ease both}
+.msg.user{flex-direction:row-reverse}
+.bubble{max-width:80%;padding:10px 14px;font-size:.87rem;line-height:1.65;border-radius:var(--r-lg)}
+.msg.agent .bubble{background:var(--black3);border:1px solid var(--line);border-bottom-left-radius:4px;color:var(--gray-lt)}
+.msg.user  .bubble{background:var(--GA-red);border-bottom-right-radius:4px;color:#fff}
+.av{width:28px;height:28px;border-radius:50%;flex-shrink:0;display:flex;align-items:center;justify-content:center;font-size:.7rem;font-weight:800;font-family:'Barlow Condensed',sans-serif;margin-bottom:2px}
+.msg.agent .av{background:var(--black4);color:var(--gray);border:1px solid var(--line)}
+.msg.user  .av{background:var(--GA-red);color:#fff}
+@keyframes bounce{0%,60%,100%{transform:translateY(0)}30%{transform:translateY(-4px)}}
+.typing{display:none;gap:4px;padding:10px 14px;background:var(--black3);border:1px solid var(--line);border-radius:var(--r-lg);border-bottom-left-radius:4px;width:fit-content}
+.typing.show{display:flex}
+.td{width:6px;height:6px;border-radius:50%;background:var(--gray-dk)}
+.td:nth-child(1){animation:bounce .85s 0s infinite}
+.td:nth-child(2){animation:bounce .85s .15s infinite}
+.td:nth-child(3){animation:bounce .85s .3s infinite}
+.chat-input-row{border-top:1px solid var(--line);padding:10px 14px;display:flex;gap:8px;flex-shrink:0;background:#0a0a0a}
+.chat-input{flex:1;background:var(--black3);border:1.5px solid var(--line2);border-radius:var(--r-lg);padding:9px 14px;font-family:'Barlow',sans-serif;font-size:.9rem;color:#fff;outline:none;resize:none;max-height:90px;transition:border-color .15s;line-height:1.5}
+.chat-input:focus{border-color:var(--GA-red)}
+.chat-input::placeholder{color:var(--gray-dk)}
+.chat-send{background:var(--GA-red);border:none;border-radius:var(--r-lg);padding:9px 14px;color:#fff;cursor:pointer;font-size:.9rem;transition:background .15s;flex-shrink:0}
+.chat-send:hover{background:var(--GA-red2)}
+.chat-send:disabled{background:var(--black4);cursor:default}
+/* opt pills */
+.opt-pills{display:flex;flex-direction:column;gap:7px;margin-top:6px}
+.opt-pill{background:var(--black2);border:1.5px solid var(--line2);border-radius:var(--r-lg);padding:10px 13px;cursor:pointer;transition:all .15s;font-size:.84rem;color:var(--gray-lt)}
+.opt-pill:hover{border-color:var(--GA-red);color:#fff}
+.opt-pill strong{display:block;color:#fff;margin-bottom:2px;font-size:.88rem}
+
+/* ── INTENT EXPLORER ── */
+.intent-card{background:var(--black2);border:1px solid var(--line);border-radius:var(--r-lg);margin-bottom:10px;overflow:hidden}
+.intent-header{padding:16px 18px;display:flex;align-items:center;gap:14px;cursor:pointer;transition:background .15s}
+.intent-header:hover{background:var(--black3)}
+.intent-icon{font-size:1.5rem;flex-shrink:0;width:36px;text-align:center}
+.intent-title{font-size:.95rem;font-weight:700;color:#fff;margin-bottom:2px}
+.intent-sub{font-size:.82rem;color:var(--gray-dk);line-height:1.4}
+.intent-arrow{margin-left:auto;font-size:.75rem;color:var(--gray-dk);transition:transform .2s;flex-shrink:0}
+.intent-card.open .intent-arrow{transform:rotate(90deg)}
+.intent-body{display:none;padding:0 18px 18px;border-top:1px solid var(--line)}
+.intent-card.open .intent-body{display:block}
+.strategy-box{background:var(--black3);border-left:3px solid var(--GA-red);border-radius:0 var(--r-lg) var(--r-lg) 0;padding:14px 16px;margin-top:14px;font-size:.86rem;color:var(--gray-lt);line-height:1.7}
+.example-chat{margin-top:14px}
+.ex-line{display:flex;gap:10px;padding:6px 0;font-size:.84rem;border-bottom:1px solid var(--line)}
+.ex-line:last-child{border-bottom:none}
+.ex-who{font-family:'JetBrains Mono',monospace;font-size:.7rem;font-weight:700;min-width:60px;flex-shrink:0;padding-top:2px}
+.ex-who.a{color:var(--blue)}.ex-who.u{color:var(--GA-red)}
+.ex-text{color:var(--gray-lt);line-height:1.55}
+
+/* ── SCRIPT NODES ── */
+.snode{background:var(--black2);border:1px solid var(--line);border-radius:var(--r-lg);padding:20px;margin-bottom:12px;transition:border-color .25s,opacity .3s}
+.snode.locked{opacity:.35;pointer-events:none}
+.snode.active{border-color:var(--GA-red)}
+.snode.done{border-color:var(--green)}
+.node-head{font-family:'Barlow Condensed',sans-serif;font-size:.72rem;font-weight:700;letter-spacing:.14em;text-transform:uppercase;margin-bottom:8px}
+.node-q{font-size:.92rem;font-weight:600;color:var(--gray-lt);margin-bottom:14px;line-height:1.55}
+.node-opts{display:flex;flex-direction:column;gap:8px}
+.node-opt{background:var(--black3);border:1.5px solid var(--line2);border-radius:var(--r-lg);padding:11px 14px;cursor:pointer;font-size:.86rem;color:var(--gray-lt);text-align:left;transition:all .15s;display:flex;gap:10px;align-items:flex-start;line-height:1.5}
+.node-opt:hover:not(.disabled){border-color:var(--GA-red);color:#fff}
+.node-opt.correct{border-color:var(--green);background:rgba(34,197,94,.07);color:#fff;cursor:default}
+.node-opt.wrong{border-color:var(--GA-red);background:rgba(232,51,58,.07);cursor:default}
+.node-opt.disabled{cursor:default}
+.nok{width:22px;height:22px;border-radius:4px;flex-shrink:0;background:var(--black2);border:1.5px solid var(--line);display:flex;align-items:center;justify-content:center;font-family:'JetBrains Mono',monospace;font-size:.68rem;font-weight:700;color:var(--gray);margin-top:1px}
+.node-opt.correct .nok{background:var(--green);border-color:var(--green);color:var(--black)}
+.node-opt.wrong   .nok{background:var(--GA-red);border-color:var(--GA-red);color:#fff}
+.node-fb{display:none;margin-top:10px;padding:11px 14px;border-radius:var(--r-lg);font-size:.85rem;line-height:1.62}
+.node-fb.show.ok {display:block;background:rgba(34,197,94,.08);border:1px solid rgba(34,197,94,.2);color:#86efac}
+.node-fb.show.bad{display:block;background:rgba(232,51,58,.08);border:1px solid rgba(232,51,58,.2);color:#fca5a5}
+
+/* ── SCRIPT PREVIEW ── */
+.script-preview{background:#0a0a0a;border:1px solid var(--line);border-radius:var(--r-lg);overflow:hidden;margin-top:24px}
+.sp-titlebar{background:var(--black3);padding:8px 16px;font-family:'JetBrains Mono',monospace;font-size:.75rem;color:var(--gray);border-bottom:1px solid var(--line);display:flex;align-items:center;gap:8px}
+.sp-dot{width:10px;height:10px;border-radius:50%}
+.sp-row{display:flex;gap:12px;padding:10px 16px;border-bottom:1px solid var(--line);font-size:.85rem;line-height:1.6}
+.sp-row:last-child{border-bottom:none}
+.sp-who{font-family:'JetBrains Mono',monospace;font-size:.7rem;font-weight:700;min-width:56px;padding-top:2px;flex-shrink:0}
+.sp-who.a{color:var(--blue)}.sp-who.u{color:var(--GA-red)}
+.sp-text{color:var(--gray-lt)}
+
+/* ── FEEDBACK REFINE ── */
+.fb-card{background:var(--black2);border:1px solid var(--line);border-radius:var(--r-lg);padding:20px;margin-bottom:14px;transition:border-color .25s}
+.fb-card.done-ok{border-color:var(--green)}.fb-card.done-bad{border-color:var(--GA-red)}
+.fb-signal-row{display:flex;align-items:flex-start;gap:14px;margin-bottom:14px;padding-bottom:14px;border-bottom:1px solid var(--line)}
+.fb-quote{font-size:.9rem;font-style:italic;color:var(--gray-lt);line-height:1.6;margin-bottom:6px}
+.sentiment-badge{font-size:.7rem;font-weight:700;padding:2px 8px;border-radius:20px;letter-spacing:.06em;text-transform:uppercase}
+.fb-q{font-size:.82rem;font-weight:700;color:var(--gray-dk);margin-bottom:10px}
+.fb-opt{background:var(--black3);border:1.5px solid var(--line2);border-radius:var(--r-lg);padding:11px 14px;cursor:pointer;font-size:.86rem;color:var(--gray-lt);text-align:left;display:flex;gap:10px;margin-bottom:8px;transition:all .15s;align-items:flex-start;line-height:1.5}
+.fb-opt:hover:not(.disabled){border-color:var(--GA-red);color:#fff}
+.fb-opt.correct{border-color:var(--green);background:rgba(34,197,94,.07);color:#fff;cursor:default}
+.fb-opt.wrong{border-color:var(--GA-red);background:rgba(232,51,58,.07);cursor:default}
+.fb-opt.disabled{cursor:default}
+.fb-fb{display:none;padding:11px 14px;border-radius:var(--r-lg);font-size:.85rem;line-height:1.62;margin-top:4px}
+.fb-fb.show.ok{display:block;background:rgba(34,197,94,.08);border:1px solid rgba(34,197,94,.2);color:#86efac}
+.fb-fb.show.bad{display:block;background:rgba(232,51,58,.08);border:1px solid rgba(232,51,58,.2);color:#fca5a5}
+.ba-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-top:12px}
+.ba-box{background:var(--black3);border-radius:var(--r-lg);padding:12px 14px}
+.ba-label{font-size:.68rem;font-weight:700;letter-spacing:.1em;text-transform:uppercase;margin-bottom:7px}
+.ba-text{font-family:'JetBrains Mono',monospace;font-size:.76rem;color:var(--gray-lt);line-height:1.65;white-space:pre-wrap}
+
+/* ── CANVAS ── */
+.c-section{background:var(--black2);border:1px solid var(--line);border-radius:var(--r-lg);padding:20px;margin-bottom:12px;position:relative}
+.c-section.filled::after{content:'✓';position:absolute;top:14px;right:16px;font-size:.85rem;font-weight:700;color:var(--green)}
+.c-label{font-family:'Barlow Condensed',sans-serif;font-size:1rem;font-weight:800;color:#fff;margin-bottom:3px}
+.c-hint{font-size:.8rem;color:var(--gray-dk);font-style:italic;margin-bottom:10px;line-height:1.5}
+.c-textarea{width:100%;background:var(--black3);border:1.5px solid var(--line2);border-radius:var(--r);padding:10px 14px;font-family:'Barlow',sans-serif;font-size:.88rem;color:var(--gray-lt);resize:vertical;min-height:80px;outline:none;line-height:1.65;transition:border-color .15s}
+.c-textarea:focus{border-color:var(--GA-red)}
+.c-textarea::placeholder{color:var(--gray-dk)}
+
+/* ── MCQ (shared) ── */
+.mcq-opt{background:var(--black2);border:2px solid var(--line);border-radius:var(--r-lg);padding:12px 16px;cursor:pointer;display:flex;align-items:flex-start;gap:12px;font-size:.91rem;color:var(--gray-lt);transition:all .15s;text-align:left;width:100%;margin-bottom:8px}
+.mcq-opt:hover:not(.disabled){border-color:var(--GA-red);color:#fff}
+.mcq-opt.correct{border-color:var(--green);background:rgba(34,197,94,.07);color:#fff}
+.mcq-opt.wrong{border-color:var(--GA-red);background:rgba(232,51,58,.07)}
+.mcq-opt.disabled{cursor:default}
+.opt-k{width:26px;height:26px;border-radius:5px;flex-shrink:0;background:var(--black3);border:1.5px solid var(--line);display:flex;align-items:center;justify-content:center;font-family:'JetBrains Mono',monospace;font-size:.72rem;font-weight:700;color:var(--gray);margin-top:1px}
+.mcq-opt.correct .opt-k{background:var(--green);border-color:var(--green);color:var(--black)}
+.mcq-opt.wrong   .opt-k{background:var(--GA-red);border-color:var(--GA-red);color:#fff}
+.mcq-fb{display:none;border-radius:var(--r-lg);padding:12px 16px;font-size:.87rem;line-height:1.62;margin-top:2px;margin-bottom:8px}
+.mcq-fb.show{display:block}
+.mcq-fb.ok{background:rgba(34,197,94,.1);border:1px solid rgba(34,197,94,.25);color:#86efac}
+.mcq-fb.bad{background:rgba(232,51,58,.1);border:1px solid rgba(232,51,58,.25);color:#fca5a5}
+
+/* ── QUIZ ── */
+.qz-meta{display:flex;align-items:center;justify-content:space-between;margin-bottom:10px;flex-wrap:wrap;gap:8px}
+.qz-meta span{font-size:.85rem;color:var(--gray)}
+.prog-bar{height:4px;background:var(--black3);border-radius:2px;margin-bottom:28px;overflow:hidden}
+.prog-fill{height:100%;background:var(--GA-red);border-radius:2px;transition:width .4s}
+.quiz-q{font-family:'Barlow Condensed',sans-serif;font-size:1.4rem;font-weight:700;line-height:1.3;color:#fff;margin-bottom:20px}
+.q-opts{display:flex;flex-direction:column;gap:8px;margin-bottom:16px}
+.q-opt{background:var(--black2);border:2px solid var(--line);border-radius:var(--r-lg);padding:14px 18px;cursor:pointer;display:flex;align-items:flex-start;gap:14px;font-size:.95rem;color:var(--gray-lt);transition:all .16s;text-align:left;width:100%}
+.q-opt:hover:not(.disabled){border-color:var(--GA-red);color:#fff;background:rgba(232,51,58,.05)}
+.q-opt.correct{border-color:var(--green);background:rgba(34,197,94,.07);color:#fff}
+.q-opt.wrong{border-color:var(--GA-red);background:rgba(232,51,58,.08);color:#fff}
+.q-opt.disabled{cursor:default}
+.q-opt-k{width:30px;height:30px;border-radius:6px;flex-shrink:0;background:var(--black3);border:1.5px solid var(--line);display:flex;align-items:center;justify-content:center;font-family:'JetBrains Mono',monospace;font-size:.75rem;font-weight:700;color:var(--gray)}
+.q-opt.correct .q-opt-k{background:var(--green);border-color:var(--green);color:var(--black)}
+.q-opt.wrong   .q-opt-k{background:var(--GA-red);border-color:var(--GA-red);color:#fff}
+.q-opt:hover:not(.disabled) .q-opt-k{border-color:var(--GA-red);color:var(--GA-red)}
+.fb-box{display:none;border-radius:var(--r-lg);padding:14px 18px;font-size:.92rem;line-height:1.6;margin-bottom:14px}
+.fb-box.show{display:flex;gap:10px;align-items:flex-start}
+.fb-box.ok{background:rgba(34,197,94,.1);border:1px solid rgba(34,197,94,.3);color:#86efac}
+.fb-box.bad{background:rgba(232,51,58,.1);border:1px solid rgba(232,51,58,.3);color:#fca5a5}
+/* RESULTS */
+.results-ring{position:relative;width:120px;height:120px;flex-shrink:0}
+.results-ring-txt{position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center}
+.ring-pct{font-family:'Barlow Condensed',sans-serif;font-size:2rem;font-weight:900;line-height:1}
+.ring-sub{font-size:.7rem;color:var(--gray);letter-spacing:.1em;text-transform:uppercase;margin-top:2px}
+.score-row{display:flex;align-items:center;gap:12px;padding:12px 0;border-bottom:1px solid var(--line)}
+.score-row:last-child{border-bottom:none}
+.score-bar-wrap{width:80px;height:3px;background:var(--black3);border-radius:2px;flex-shrink:0}
+.score-bar-fill{height:100%;border-radius:2px}
+.tk-item{display:flex;gap:12px;padding:14px 0;border-bottom:1px solid var(--line)}
+.tk-item:last-child{border-bottom:none}
+.tk-num{font-family:'Barlow Condensed',sans-serif;font-size:1.6rem;font-weight:900;color:var(--GA-red);flex-shrink:0;line-height:1;padding-top:2px}
+.tk-txt{font-size:.92rem;color:var(--gray-lt);line-height:1.65}
+</style>
+</head>
+<body>
+
+<header>
+  <div class="ga-logo" onclick="nav('intro')">
+    <div class="ga-mark">GA</div>
+    <div class="ga-name">General Assembly<span>Build AI Agents · BAA 12.0</span></div>
+  </div>
+  <div class="tab-bar">
+    <div class="tab active" id="t-intro"   onclick="nav('intro')">⬡ Overview</div>
+    <div class="tab"        id="t-brief"   onclick="nav('brief')">📋 Brief</div>
+    <div class="tab"        id="t-intents" onclick="nav('intents')">🎯 Intents</div>
+    <div class="tab"        id="t-script"  onclick="nav('script')">✍️ Script</div>
+    <div class="tab"        id="t-test"    onclick="nav('test')">▶ Test</div>
+    <div class="tab"        id="t-refine"  onclick="nav('refine')">🔧 Refine</div>
+    <div class="tab"        id="t-canvas"  onclick="nav('canvas')">📐 Canvas</div>
+    <div class="tab"        id="t-quiz"    onclick="nav('quiz')">◇ Check</div>
+    <div class="tab"        id="t-results" onclick="nav('results')">★ Results</div>
+  </div>
+  <div class="hd-end"><div class="prog-chip" id="progressChip">0 / 5</div></div>
+</header>
+
+<!-- ══════════ INTRO ══════════ -->
+<div class="section active" id="s-intro">
+<div class="wrap">
+  <div class="a1" style="padding-bottom:40px;border-bottom:1px solid var(--line);margin-bottom:36px">
+    <div class="hero-kicker"><div class="dot"></div>Hands-On Lab · Module 12 · BAA 12.0</div>
+    <h1>Dialogue<br/><span class="red">Design</span></h1>
+    <p class="lead">Good agents don't just answer questions — they guide conversations. You'll design a full conversational script for a travel booking agent: mapping user intents, writing clarification flows, presenting options clearly, and refining prompts from real user feedback.</p>
+    <button class="btn btn-red" onclick="nav('brief')">Start Designing →</button>
+  </div>
+
+  <span class="eyebrow">Learning Objectives</span>
+  <div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(240px,1fr));gap:12px;margin-bottom:32px" class="a2">
+    <div class="card" style="padding:18px 20px;display:flex;gap:14px;margin-bottom:0">
+      <div style="font-size:1.8rem;flex-shrink:0">💬</div>
+      <div><strong style="color:#fff;display:block;margin-bottom:4px">Design Conversational Interfaces</strong><div style="font-size:.86rem;color:var(--gray-lt);line-height:1.5">Promote clear, efficient, and natural communication between users and agents.</div></div>
+    </div>
+    <div class="card" style="padding:18px 20px;display:flex;gap:14px;margin-bottom:0">
+      <div style="font-size:1.8rem;flex-shrink:0">🧪</div>
+      <div><strong style="color:#fff;display:block;margin-bottom:4px">Test Agent Interactions</strong><div style="font-size:.86rem;color:var(--gray-lt);line-height:1.5">Ensure dialogues are user-friendly, intuitive, and easy to understand across different user types.</div></div>
+    </div>
+    <div class="card" style="padding:18px 20px;display:flex;gap:14px;margin-bottom:0">
+      <div style="font-size:1.8rem;flex-shrink:0">🔧</div>
+      <div><strong style="color:#fff;display:block;margin-bottom:4px">Refine From Feedback</strong><div style="font-size:.86rem;color:var(--gray-lt);line-height:1.5">Improve agent prompts in response to user frustration signals and confusion patterns.</div></div>
+    </div>
+  </div>
+
+  <div class="hr"></div>
+  <span class="eyebrow">Lab Roadmap</span>
+  <div class="card a3"><div class="roadmap">
+    <div class="rm-item"><div class="rm-dot" id="dot-brief">—</div><div><div class="rm-label" id="lbl-brief">Brief — Meet Voyager, your travel booking agent</div><div class="rm-sub">Learn the scope, user base, and principles of good dialogue</div></div></div>
+    <div class="rm-item"><div class="rm-dot" id="dot-intents">1</div><div><div class="rm-label" id="lbl-intents">Map User Intents</div><div class="rm-sub">Identify the 5 core intents and the ambiguity patterns your agent must handle</div></div></div>
+    <div class="rm-item"><div class="rm-dot" id="dot-script">2</div><div><div class="rm-label" id="lbl-script">Write the Conversational Script</div><div class="rm-sub">Design greeting, clarification, option presentation, error recovery, and confirmation — node by node</div></div></div>
+    <div class="rm-item"><div class="rm-dot" id="dot-test">3</div><div><div class="rm-label" id="lbl-test">Test Across 3 User Personas</div><div class="rm-sub">Run live test conversations — a vague traveler, a demanding business traveler, an anxious first-timer</div></div></div>
+    <div class="rm-item"><div class="rm-dot" id="dot-refine">4</div><div><div class="rm-label" id="lbl-refine">Refine From User Feedback</div><div class="rm-sub">Diagnose 4 real feedback signals and rewrite the broken prompts</div></div></div>
+    <div class="rm-item"><div class="rm-dot" id="dot-canvas">5</div><div><div class="rm-label" id="lbl-canvas">Complete the Design Canvas</div><div class="rm-sub">Assemble the final specification document your engineering team would implement</div></div></div>
+    <div class="rm-item"><div class="rm-dot" id="dot-quiz">—</div><div><div class="rm-label">Knowledge Check · 7 questions · 70% to pass</div></div></div>
+  </div></div>
+</div>
+</div>
+
+<!-- ══════════ BRIEF ══════════ -->
+<div class="section" id="s-brief">
+<div class="wrap">
+  <span class="eyebrow">The Agent Brief</span>
+  <h2>Meet <span class="red">Voyager</span></h2>
+  <p class="lead">Voyager is a conversational travel booking agent. It books flights, hotels, and packages through natural conversation. Your job is to design the dialogue that makes Voyager feel like a brilliant travel consultant — not a search form.</p>
+
+  <div class="card" style="border-left:4px solid var(--GA-red);padding:22px 24px;margin-bottom:14px">
+    <div style="font-size:.7rem;font-weight:700;letter-spacing:.12em;text-transform:uppercase;color:var(--GA-red);margin-bottom:10px">Product Brief</div>
+    <p style="font-size:.93rem;color:var(--gray-lt);line-height:1.85">Voyager users arrive with wildly different levels of specificity. Some know exactly what they want: <em>"Business class, JFK to Heathrow, Oct 14, returning Oct 21, under $4,000."</em> Most don't: <em>"I want to go somewhere warm in November."</em><br/><br/>
+    The agent's dialogue must handle the full spectrum — from decisive to undecided. It must ask exactly the right clarifying questions (not too many, not too few), present options in a scannable format the user can act on, recover gracefully from confusion, and feel like a conversation rather than a form.<br/><br/>
+    The <strong style="color:#fff">number-one failure mode</strong> of travel agents is asking too many questions before giving any value. Users abandon when they feel interrogated. The design challenge is gathering necessary information while always moving the conversation forward.</p>
+  </div>
+
+  <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-bottom:16px">
+    <div style="background:rgba(232,51,58,.06);border:1px solid rgba(232,51,58,.2);border-radius:var(--r-lg);padding:18px 20px">
+      <div style="font-size:.7rem;font-weight:700;letter-spacing:.12em;text-transform:uppercase;color:var(--GA-red);margin-bottom:10px">❌ Bad Dialogue Patterns</div>
+      <div style="display:flex;flex-direction:column;gap:7px;font-size:.86rem;color:var(--gray-lt)">
+        <div>Asking 3+ questions in a single turn</div>
+        <div>Showing options without prices or key differentiators</div>
+        <div>Responding to ambiguity with "I don't understand"</div>
+        <div>Confirming every detail before proceeding</div>
+        <div>Re-asking for information already given</div>
+        <div>Using technical jargon (fare class, IATA codes)</div>
+      </div>
+    </div>
+    <div style="background:rgba(34,197,94,.06);border:1px solid rgba(34,197,94,.2);border-radius:var(--r-lg);padding:18px 20px">
+      <div style="font-size:.7rem;font-weight:700;letter-spacing:.12em;text-transform:uppercase;color:var(--green);margin-bottom:10px">✓ Good Dialogue Patterns</div>
+      <div style="display:flex;flex-direction:column;gap:7px;font-size:.86rem;color:var(--gray-lt)">
+        <div>One question per turn, maximum</div>
+        <div>Show 3 options max with clear differentiators</div>
+        <div>Default to an assumption and let users correct it</div>
+        <div>Surface value early — partial info is enough to start</div>
+        <div>Confirm only the decision-critical details before booking</div>
+        <div>Use plain language (economy, direct, price range)</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="callout callout-tip">
+    <strong>💡 Core design principle:</strong> A great travel agent makes you feel understood before you finish your sentence. They fill in reasonable assumptions and ask only about the gaps that actually matter. Design Voyager to do the same.
+  </div>
+
+  <div style="margin-top:24px">
+    <button class="btn btn-red" onclick="markDone('brief');nav('intents')">Map the Intents →</button>
+  </div>
+</div>
+</div>
+
+<!-- ══════════ INTENTS ══════════ -->
+<div class="section" id="s-intents">
+<div class="wrap">
+  <span class="eyebrow">Section 01 · Analysis</span>
+  <h2>Map User <span class="red">Intents</span></h2>
+  <p class="lead">Every user message carries an intent — often an ambiguous one. Before writing dialogue, you need to know what users are actually trying to say, and the minimum clarification needed to move forward. Open all 5 intents, then answer the comprehension question.</p>
+
+  <div class="callout callout-warn" style="margin-bottom:20px">
+    <strong>⚠️ Ambiguity is the enemy of booking.</strong> "Somewhere warm" can mean Cancún, Bali, or the Maldives. "Not too expensive" means $400 to one user and $4,000 to another. Resolve ambiguity with the fewest possible turns — or anchor with options and let the user self-select.
+  </div>
+
+  <div id="intentList"></div>
+  <div id="intentQuiz" style="margin-top:20px"></div>
+  <div id="intentNext" style="display:none;margin-top:16px">
+    <button class="btn btn-red" onclick="markDone('intents');nav('script')">Next: Write the Script →</button>
+  </div>
+</div>
+</div>
+
+<!-- ══════════ SCRIPT ══════════ -->
+<div class="section" id="s-script">
+<div class="wrap">
+  <span class="eyebrow">Section 02 · Design Activity</span>
+  <h2>Write the <span class="red">Conversational Script</span></h2>
+  <p class="lead">Work through 5 critical dialogue nodes — choosing the right response strategy at each decision point. Your choices assemble into a complete, readable conversation script at the end.</p>
+
+  <div class="callout callout-tip" style="margin-bottom:20px">
+    <strong>💡 One turn, one purpose.</strong> Each agent turn should do one thing: either provide value or resolve one specific ambiguity. Never ask a question AND deliver an answer in the same turn — users prioritize one and miss the other.
+  </div>
+
+  <div id="scriptNodes"></div>
+  <div id="scriptPreviewWrap" style="display:none"></div>
+</div>
+</div>
+
+<!-- ══════════ TEST ══════════ -->
+<div class="section" id="s-test">
+<div class="wrap">
+  <span class="eyebrow">Section 03 · Testing</span>
+  <h2>Test Across <span class="red">3 Personas</span></h2>
+  <p class="lead">A dialogue that works for one user type will fail for another. Test Voyager against three personas with different communication styles. Watch where it excels and where it breaks — those failures are your design inputs for the Refine section.</p>
+
+  <div id="personaBtns" style="display:flex;gap:10px;flex-wrap:wrap;margin-bottom:16px"></div>
+  <div id="personaBio" style="margin-bottom:14px"></div>
+
+  <div class="chat-shell" style="height:430px">
+    <div class="chat-topbar">
+      <div class="online-dot"></div>
+      <span class="agent-name">Voyager · Travel Agent</span>
+      <span class="persona-badge" id="activeTag">select a persona above</span>
+    </div>
+    <div class="msgs" id="chatMsgs"></div>
+    <div class="chat-input-row">
+      <textarea class="chat-input" id="chatInput" placeholder="Select a persona above to begin…" rows="1" disabled oninput="resize(this)" onkeydown="enterSend(event)"></textarea>
+      <button class="chat-send" id="chatSend" disabled onclick="sendMsg()">➤</button>
+    </div>
+  </div>
+
+  <div style="margin-top:10px;margin-bottom:4px;font-size:.75rem;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:var(--gray-dk)">Quick Prompts</div>
+  <div id="quickPrompts" style="display:flex;flex-wrap:wrap;gap:8px;margin-bottom:20px"></div>
+
+  <div id="testNote" style="display:none;margin-top:4px"></div>
+  <div style="margin-top:14px">
+    <button class="btn btn-ghost" id="testNextBtn" style="display:none" onclick="markDone('test');nav('refine')">Next: Refine the Dialogue →</button>
+  </div>
+</div>
+</div>
+
+<!-- ══════════ REFINE ══════════ -->
+<div class="section" id="s-refine">
+<div class="wrap">
+  <span class="eyebrow">Section 04 · Refinement</span>
+  <h2>Refine From <span class="red">User Feedback</span></h2>
+  <p class="lead">Real user testing surfaces friction points. Below are four actual feedback signals from the Voyager beta. For each: diagnose what went wrong in the original design, then see the corrected version.</p>
+
+  <div class="callout callout-purple" style="margin-bottom:20px">
+    <strong>🔮 Feedback signals are design data.</strong> When users abandon, repeat themselves, say "just book it," or express frustration — that is diagnostic signal, not noise. Trace each signal back to the exact turn where the breakdown happened.
+  </div>
+
+  <div id="feedbackList"></div>
+  <div id="refineNext" style="display:none;margin-top:16px">
+    <button class="btn btn-red" onclick="markDone('refine');nav('canvas')">Next: Complete the Canvas →</button>
+  </div>
+</div>
+</div>
+
+<!-- ══════════ CANVAS ══════════ -->
+<div class="section" id="s-canvas">
+<div class="wrap">
+  <span class="eyebrow">Section 05 · Deliverable</span>
+  <h2>Dialogue Design <span class="red">Canvas</span></h2>
+  <p class="lead">You've mapped intents, written a script, tested personas, and refined prompts. Now assemble the final design canvas — the document a real product team would use to implement Voyager's conversational logic.</p>
+
+  <div class="callout callout-tip" style="margin-bottom:20px">
+    <strong>💡 Specificity matters.</strong> "Ask about budget" is a bad canvas entry. "If no price range is given within 2 turns, offer three tiers as selectable options: Budget / Mid-range / Premium" is a good one. Vague specs produce inconsistent implementations.
+  </div>
+
+  <div id="canvasList"></div>
+  <div id="canvasResult" style="display:none;margin-top:14px"></div>
+  <div style="margin-top:16px;display:flex;gap:10px;flex-wrap:wrap">
+    <button class="btn btn-red" id="canvasSubmitBtn" onclick="submitCanvas()">Submit Canvas</button>
+    <button class="btn btn-ghost" id="canvasNextBtn" style="display:none" onclick="markDone('canvas');nav('quiz')">Proceed to Knowledge Check →</button>
+  </div>
+</div>
+</div>
+
+<!-- ══════════ QUIZ ══════════ -->
+<div class="section" id="s-quiz">
+<div class="wrap">
+  <span class="eyebrow">Knowledge Check</span>
+  <h2>7 <span class="red">Questions</span></h2>
+  <p class="lead">Drawn from every section. 70% to pass.</p>
+  <div id="quizActive">
+    <div class="qz-meta"><span id="qMeta">Question 1 of 7</span><span id="qScoreTxt">Score: 0 / 0</span></div>
+    <div class="prog-bar"><div class="prog-fill" id="qProg" style="width:0%"></div></div>
+    <div class="card card-rb">
+      <div class="quiz-q" id="quizQ"></div>
+      <div class="q-opts" id="quizOpts"></div>
+      <div class="fb-box" id="quizFB"></div>
+      <button class="btn btn-red" id="qNextBtn" style="display:none" onclick="nextQ()">Continue →</button>
+    </div>
+  </div>
+  <div id="quizDone" style="display:none">
+    <div class="card card-rb">
+      <h3 style="font-size:1.2rem;margin-bottom:8px">Quiz Complete <span id="qBadge"></span></h3>
+      <p id="qMsg" style="font-size:.95rem;color:var(--gray-lt);margin-bottom:20px;line-height:1.7"></p>
+      <button class="btn-green" onclick="markDone('quiz');buildResults();nav('results')">See My Results →</button>
+    </div>
+  </div>
+</div>
+</div>
+
+<!-- ══════════ RESULTS ══════════ -->
+<div class="section" id="s-results">
+<div class="wrap">
+  <span class="eyebrow">Lab Debrief</span>
+  <h2>Dialogue Design <span class="red">Complete</span></h2>
+  <div id="resultsBody"></div>
+</div>
+</div>
+
+<!-- ══════════════════ SCRIPT ══════════════════ -->
+<script>
+const ALL_SECS=['intro','brief','intents','script','test','refine','canvas','quiz','results'];
+let completed=new Set(), sectionScores={};
+
+function nav(id){
+  ALL_SECS.forEach(s=>{
+    document.getElementById('s-'+s).classList.remove('active');
+    const t=document.getElementById('t-'+s); if(t)t.classList.remove('active');
+  });
+  document.getElementById('s-'+id).classList.add('active');
+  const t=document.getElementById('t-'+id); if(t)t.classList.add('active');
+  window.scrollTo({top:0,behavior:'smooth'});
+  if(id==='intents'&&!iBuilt) buildIntents();
+  if(id==='script' &&!sBuilt)  buildScript();
+  if(id==='test'   &&!tBuilt)  buildTest();
+  if(id==='refine' &&!rBuilt)  buildRefine();
+  if(id==='canvas' &&!cBuilt)  buildCanvas();
+  if(id==='quiz'   &&!qStarted)initQuiz();
+}
+function markDone(key){
+  completed.add(key);
+  document.getElementById('progressChip').textContent=completed.size+' / 5';
+  const d=document.getElementById('dot-'+key),l=document.getElementById('lbl-'+key);
+  if(d){d.className='rm-dot done';d.textContent='✓';}
+  if(l)l.className='rm-label done';
+}
+const delay=ms=>new Promise(r=>setTimeout(r,ms));
+function resize(el){el.style.height='auto';el.style.height=Math.min(el.scrollHeight,90)+'px';}
+
+// ─── INTENTS ─────────────────────────────────────────────────────────────────
+let iBuilt=false, iOpened=new Set(), iAnswered=false;
+
+const INTENTS=[
+  {icon:'🌍',title:'Destination Intent — Vague Geography',sub:'User says "somewhere warm" or "Europe maybe"',
+   strategy:'Don\'t ask "Where exactly?" — the user already told you they don\'t know. Instead, present 2–3 destination clusters that match their description and ask which vibe fits.',
+   examples:[
+     {w:'u',t:'"I want to go somewhere warm and relaxing."'},
+     {w:'a',t:'"I love that vibe! Three warm options come to mind — Caribbean (closest from the US), Mediterranean (cultural + beach), or Southeast Asia (best value, longer flight). Any of those feel right?"'},
+     {w:'u',t:'"Caribbean sounds good."'},
+     {w:'a',t:'"Perfect — searching Caribbean options now. Any particular island, or should I show you the best-value spots?"'},
+   ]},
+  {icon:'📅',title:'Date Intent — Flexible vs. Fixed',sub:'User says "sometime in October" or gives exact dates',
+   strategy:'If dates are flexible, treat it as a pricing optimization opportunity — show the cheapest windows rather than asking for specific dates. If dates are fixed, confirm once and proceed.',
+   examples:[
+     {w:'u',t:'"I\'m flexible in November."'},
+     {w:'a',t:'"Since you\'re flexible, I can find you the cheapest 7-night window in November — results show Nov 12–19 is about $180 cheaper than peak weekends. Want to lock in around that, or is a specific date important?"'},
+   ]},
+  {icon:'💰',title:'Budget Intent — Relative Language',sub:'User says "not too expensive" or "something reasonable"',
+   strategy:'Never ask "What\'s your budget?" cold. Anchor with price tiers in the context of actual results, so the user can self-select rather than guess a number.',
+   examples:[
+     {w:'u',t:'"Nothing too expensive, please."'},
+     {w:'a',t:'"Got it. For Caribbean in November, options run $450–$850 (economy, 1 stop) up to $1,200–$2,000 (premium economy, direct). Which range should I focus on?"'},
+   ]},
+  {icon:'👥',title:'Party Composition — Unstated Travelers',sub:'User hasn\'t said how many people are traveling',
+   strategy:'Default to solo and state the assumption explicitly. This lets the user correct it without being interrogated. Don\'t make party size the first question — it signals you\'re building a form, not having a conversation.',
+   examples:[
+     {w:'a',t:'"I\'ll search for one traveler — let me know if you\'re bringing anyone along and I\'ll adjust."'},
+     {w:'u',t:'"Actually it\'s two of us."'},
+     {w:'a',t:'"Perfect, updating to 2 travelers. That changes the hotel options too — do you prefer a single room with two beds, or separate rooms?"'},
+   ]},
+  {icon:'⚠️',title:'Preference Conflict — Stated vs. Constraint',sub:'User wants luxury hotel + very low budget',
+   strategy:'Surface the conflict explicitly and non-judgmentally, offering a resolution path. Never silently override a stated preference — always explain the trade-off and give the user the choice.',
+   examples:[
+     {w:'u',t:'"I want a beachfront hotel, and I\'m trying to keep the whole trip under $1,000."'},
+     {w:'a',t:'"The beachfront hotels you\'re looking at start around $220/night — that\'s $1,540 for 7 nights before flights. I can find properties a 10-min drive from the beach at $95–$130/night that fit your budget. Want me to look at those, or adjust the trip length?"'},
+   ]},
+];
+
+function buildIntents(){
+  iBuilt=true;
+  const el=document.getElementById('intentList');
+  INTENTS.forEach((intent,i)=>{
+    const card=document.createElement('div'); card.className='intent-card'; card.id='ic-'+i;
+    card.innerHTML=`
+      <div class="intent-header">
+        <div class="intent-icon">${intent.icon}</div>
+        <div style="flex:1"><div class="intent-title">${intent.title}</div><div class="intent-sub">${intent.sub}</div></div>
+        <div class="intent-arrow">▶</div>
+      </div>
+      <div class="intent-body">
+        <div class="strategy-box"><strong style="color:#fff;display:block;margin-bottom:5px">Clarification Strategy</strong>${intent.strategy}</div>
+        <div class="example-chat" style="margin-top:14px">
+          <div style="font-size:.7rem;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:var(--gray-dk);margin-bottom:6px">Example Dialogue</div>
+          ${intent.examples.map(ex=>`<div class="ex-line"><span class="ex-who ${ex.w}">${ex.w==='a'?'VOYAGER':'USER'}</span><span style="color:var(--gray-lt);font-size:.84rem;line-height:1.55">${ex.t}</span></div>`).join('')}
+        </div>
+      </div>`;
+    card.querySelector('.intent-header').addEventListener('click',()=>{
+      card.classList.toggle('open');
+      card.querySelector('.intent-arrow').textContent=card.classList.contains('open')?'▼':'▶';
+      iOpened.add(i);
+      if(iOpened.size>=5&&!iAnswered){
+        setTimeout(()=>{ document.getElementById('intentQuiz').style.display='block'; buildIntentQuiz(); },300);
+      }
+    });
+    el.appendChild(card);
+  });
+}
+function buildIntentQuiz(){
+  const el=document.getElementById('intentQuiz'); el.innerHTML='';
+  el.insertAdjacentHTML('beforeend',`<div class="hr" style="margin:16px 0"></div><span class="eyebrow">Comprehension Check</span><div style="font-size:.82rem;font-weight:700;color:var(--gray-dk);margin:10px 0">A user says: "I want to go somewhere in Europe, maybe in October, not too pricey." How many clarifying questions should Voyager ask before showing any results?</div>`);
+  const opts=[
+    {k:'A',text:'Four: which country, exact dates, budget number, and number of travelers.',ans:false,fb:'Four sequential questions before any value is delivered is an interrogation. Users read multi-question turns as forms and either answer only the first question or abandon. Every additional question multiplies the chance of drop-off.'},
+    {k:'B',text:'One — the most ambiguous variable (destination vibe in Europe is vast). Make reasonable assumptions on the rest and surface them in the results for the user to correct.',ans:true,fb:'Correct. One question narrows the most ambiguous variable. Budget and dates can be resolved reactively once the user sees real prices — "options run $600–$1,400" lands better than asking "what\'s your budget?" cold. Show value fast; let reactions answer the questions you didn\'t ask.'},
+    {k:'C',text:'Zero — show all Europe-wide results and let the user filter.',ans:false,fb:'Zero clarification on a continent-wide request produces an overwhelming, unusable result set. The agent should ask about destination vibe before searching — just not about everything at once.'},
+    {k:'D',text:'Two: destination vibe and exact budget figure.',ans:false,fb:'Close, but asking for an exact budget figure is still too clinical for a first turn. The agent should surface budget anchoring within the results ("options run $600–$1,400") rather than front-loading a financial question before the user has seen anything.'},
+  ];
+  renderMCQ(el, opts, (ok)=>{
+    iAnswered=true;
+    sectionScores.intents={earned:ok?1:0,possible:1};
+    document.getElementById('intentNext').style.display='block';
+  });
+}
+
+// ─── SCRIPT BUILDER ──────────────────────────────────────────────────────────
+let sBuilt=false, sProgress={}, sCorrect=0, sCompleted=0;
+
+const SNODES=[
+  {id:'greeting',color:'var(--blue)',label:'Node 1 · Opening Turn',
+   q:'A user opens Voyager and hasn\'t typed anything yet. What should the agent\'s greeting say?',
+   opts:[
+     {t:'"Hi! Welcome to Voyager. Please fill in: destination, dates, travelers, budget, and cabin class."',c:false,fb:'A form disguised as a greeting. It front-loads every variable before establishing any rapport. Users open a travel booking app expecting a conversation — not a government form.'},
+     {t:'"Hey there! Where are you dreaming of going? ✈️"',c:true,fb:'Correct. One warm, open question that invites the user to lead. It\'s brief, welcoming, and puts them in control. The agent then adapts to whatever they say — no pre-built category menus to restrict their frame.'},
+     {t:'"Welcome to Voyager. I book flights, hotels, and packages. Are you looking for leisure, business, or adventure travel?"',c:false,fb:'Presenting a category menu sounds helpful but restricts the user\'s thinking. Many trips don\'t fit neatly into categories. Let users describe in their own words — the agent should listen and adapt, not categorize before listening.'},
+     {t:'"Hello. I am Voyager. Please state your origin city and destination city."',c:false,fb:'Robotic, transactional, and cold. Many users haven\'t decided their destination yet — forcing city-name input as the first interaction will immediately alienate the majority of users who are still in exploratory mode.'},
+   ]},
+  {id:'vague',color:'var(--yellow)',label:'Node 2 · Vague Destination',
+   q:'User responds: "I want to go somewhere warm and relaxing, probably a beach." How does Voyager respond?',
+   opts:[
+     {t:'"Sure! Which country? What dates? How many people? What\'s your budget?"',c:false,fb:'Four questions in a single turn. Users read this as a form and either answer only the first question or abandon. Each question after the first halves your expected response quality.'},
+     {t:'"I love beach trips! Three warm-weather clusters come to mind:\n🌴 Caribbean — closest from the US, great value\n🌊 Mediterranean — cultural + coastal, best in summer\n🌺 Southeast Asia — best value, longer flight\n\nAny of those feel right?"',c:true,fb:'Correct. Immediate value (three concrete options), a reasonable assumption (likely from the US), and one focused question. The user can now narrow the decision space without having answered a single prior question — this is progressive disclosure at work.'},
+     {t:'"Please be more specific. I need a destination city to search flights."',c:false,fb:'True but terrible UX. The agent knows the user doesn\'t have a city yet — that\'s the whole point. A good dialogue designer anticipates this exact scenario and builds a structured path forward, rather than pushing the burden back.'},
+     {t:'"Great! I\'ll search all warm beach destinations worldwide and list them."',c:false,fb:'An unfiltered worldwide search returns hundreds of results and is overwhelming. The agent\'s job is to narrow before presenting — not to dump and let the user sort.'},
+   ]},
+  {id:'options',color:'var(--green)',label:'Node 3 · Presenting Flight Options',
+   q:'User chose Caribbean. You have 3 relevant flights. How do you present them?',
+   opts:[
+     {t:'"Here are all available flights: [flight numbers, times, layovers, airports, fare classes, baggage policies, and prices for all results]"',c:false,fb:'Information overload. Users scanning a wall of flight details experience cognitive fatigue and postpone decisions. Great option presentation is curated — show only the dimensions that differentiate the choices.'},
+     {t:'"Three options for the Caribbean 🌴\n\n💰 Best price · Punta Cana · Nov 8–15 · $489 · 1 stop · 5.5h\n⚡ Fastest · Cancún · Nov 8–15 · $724 · Direct · 3.5h\n⚖️ Best value · Cancún · Nov 8–15 · $621 · 1 stop · 4h\n\nWhich feels right, or want me to adjust?"',c:true,fb:'Correct. Scannable format with exactly the right dimensions: destination, dates, price, and the key quality differentiator (direct vs. stop, flight time). Three options max, each with a clear identity (cheapest / fastest / best value). The closing question opens the door for refinement rather than forcing a hard binary.'},
+     {t:'"I found 12 options. Please tell me your preferred airline, departure time, layover tolerance, and baggage requirements first."',c:false,fb:'Gatekeeping results behind additional questions when you already have results is a cardinal UX sin. Show the best 3, let the user react, then refine from feedback. Holding results hostage destroys trust.'},
+     {t:'"I found flights. Here are the details…" [raw API response with 40 fields per flight]',c:false,fb:'Passing raw data to the user instead of formatting it for human consumption. Never expose internal data structures in conversation — always curate and present the minimum information needed for a confident decision.'},
+   ]},
+  {id:'recovery',color:'var(--orange)',label:'Node 4 · Error Recovery',
+   q:'User asks: "Can you book me a train from London to Rome?" — Voyager doesn\'t support rail. How does it respond?',
+   opts:[
+     {t:'"Error: rail booking not supported."',c:false,fb:'A bare error with no path forward is a dead end. It tells the user what failed but offers nothing — no alternative, no next step. This is the worst possible error recovery pattern.'},
+     {t:'"I can\'t book trains — but the London–Rome route is well-covered by budget airlines (Ryanair, easyJet, ITA Airways) in the €40–€150 range. Want me to search flights for that route instead?"',c:true,fb:'Correct. Three-part recovery: acknowledge the limitation → provide genuinely useful context (specific alternatives, price anchor) → offer a concrete forward path. Users tolerate agent limitations when they\'re handled gracefully with alternatives — not when they hit a wall.'},
+     {t:'"I only book flights and hotels. Please use a different service for trains."',c:false,fb:'Honest but dismissive. The user is trying to get somewhere — the agent should stay engaged and offer what it can do, rather than redirecting away. "Use a different service" is the conversational equivalent of hanging up.'},
+     {t:'"Train booking isn\'t available. What else can I help you with?"',c:false,fb:'Better than a cold redirect, but misses the opportunity to provide useful context about the alternative. A helpful agent fills the gap rather than just closing it.'},
+   ]},
+  {id:'confirm',color:'var(--teal)',label:'Node 5 · Pre-Booking Confirmation',
+   q:'User selects the $489 Punta Cana option. How does Voyager confirm before booking?',
+   opts:[
+     {t:'"Let me confirm all details: flight AA2841, JFK→PUJ, Nov 8, 07:15→14:30 via MIA, economy Saver, seat 24B, 1 checked bag, non-refundable, no changes. Return AA2840, Nov 15. Total $489. Confirm?"',c:false,fb:'Technically accurate but exhausting to read. A wall of confirmation text causes users to click confirm without reading — which defeats the purpose entirely. Surface only the details the user actually needs to verify.'},
+     {t:'"Booking Punta Cana ✓\n📅 Nov 8–15 · 1 stop · $489\n🏷 Economy · Non-refundable\n\nShall I go ahead?"',c:true,fb:'Correct. Three lines, all the decision-relevant details. Critically: the non-refundable flag is highlighted — this is the detail users most often complain about "not knowing" after the fact. Good confirmations are concise and highlight what matters, not comprehensive and bury it.'},
+     {t:'"Confirmed! Booking now."',c:false,fb:'No confirmation at all before executing an irreversible financial action. The agent must surface the non-refundable flag, the exact price, and the exact dates before booking. Skipping confirmation on transactions is a trust-destroying pattern.'},
+     {t:'"Are you sure? Please review all the details I mentioned earlier."',c:false,fb:'Vague anxiety-inducing confirmation that refers back to details without restating them. This pattern creates doubt without providing context — the worst of both worlds. Always restate the critical details in the confirmation turn.'},
+   ]},
+];
+
+function buildScript(){
+  sBuilt=true;
+  const el=document.getElementById('scriptNodes');
+  SNODES.forEach((node,ni)=>{
+    const wrap=document.createElement('div'); wrap.className='snode'+(ni>0?' locked':''); wrap.id='sn-'+node.id;
+    if(ni===0) wrap.classList.add('active');
+    wrap.innerHTML=`<div class="node-head" style="color:${node.color}">${node.label}</div>
+      <div class="node-q">${node.q}</div>
+      <div class="node-opts" id="no-${node.id}"></div>
+      <div class="node-fb" id="nfb-${node.id}"></div>`;
+    const L=['A','B','C','D'];
+    node.opts.forEach((opt,oi)=>{
+      const btn=document.createElement('button'); btn.className='node-opt'; btn.id=`nopt-${node.id}-${oi}`;
+      btn.innerHTML=`<span class="nok">${L[oi]}</span><span style="white-space:pre-line">${opt.t}</span>`;
+      btn.addEventListener('click',()=>pickNode(node.id,oi,node,ni));
+      document.getElementById('no-'+node.id).appendChild(btn);
+    });
+    el.appendChild(wrap);
+  });
+}
+function pickNode(nodeId,oi,node,ni){
+  if(sProgress[nodeId]!==undefined)return;
+  sProgress[nodeId]=oi;
+  const opt=node.opts[oi];
+  if(opt.c) sCorrect++;
+  const L=['A','B','C','D'];
+  node.opts.forEach((_,j)=>{
+    const btn=document.getElementById(`nopt-${nodeId}-${j}`);
+    btn.classList.add('disabled');
+    if(node.opts[j].c) btn.classList.add('correct');
+    else if(j===oi&&!opt.c) btn.classList.add('wrong');
+  });
+  const fb=document.getElementById('nfb-'+nodeId);
+  fb.className='node-fb show '+(opt.c?'ok':'bad');
+  fb.innerHTML=`<strong>${opt.c?'✓ Good choice:':'Not quite:'}</strong> ${opt.fb}`;
+  document.getElementById('sn-'+nodeId).classList.remove('active');
+  document.getElementById('sn-'+nodeId).classList.add('done');
+  if(ni+1<SNODES.length){
+    const next=document.getElementById('sn-'+SNODES[ni+1].id);
+    next.classList.remove('locked'); next.classList.add('active');
+    setTimeout(()=>next.scrollIntoView({behavior:'smooth',block:'nearest'}),200);
+  }
+  sCompleted++;
+  sectionScores.script={earned:sCorrect,possible:5};
+  if(sCompleted===SNODES.length) buildScriptPreview();
+}
+function buildScriptPreview(){
+  const wrap=document.getElementById('scriptPreviewWrap'); wrap.style.display='block';
+  const script=[
+    {w:'a',t:'Hey there! Where are you dreaming of going? ✈️'},
+    {w:'u',t:'I want to go somewhere warm and relaxing, probably a beach.'},
+    {w:'a',t:'I love beach trips! Three warm-weather clusters come to mind:\n🌴 Caribbean — closest from the US, great value\n🌊 Mediterranean — cultural + coastal\n🌺 Southeast Asia — best value, longer flight\n\nAny of those feel right?'},
+    {w:'u',t:'Caribbean sounds good. Can you also book trains?'},
+    {w:'a',t:'Train booking isn\'t something I can do yet — but budget airlines cover the Caribbean hops well in the $40–$150 range. For your Caribbean trip, here are 3 options:\n\n💰 Best price · Punta Cana · Nov 8–15 · $489 · 1 stop\n⚡ Fastest · Cancún · Nov 8–15 · $724 · Direct\n⚖️ Best value · Cancún · Nov 8–15 · $621 · 1 stop\n\nWhich feels right?'},
+    {w:'u',t:'Option A — Punta Cana.'},
+    {w:'a',t:'Booking Punta Cana ✓\n📅 Nov 8–15 · 1 stop · $489\n🏷 Economy · Non-refundable\n\nShall I go ahead?'},
+    {w:'u',t:'Yes!'},
+    {w:'a',t:'✅ Done! Punta Cana confirmed. Confirmation sent to your email. Anything else — hotel, excursions, or travel insurance?'},
+  ];
+  wrap.innerHTML=`<div class="hr" style="margin:24px 0"/><span class="eyebrow">Your Assembled Script</span><div class="script-preview"><div class="sp-titlebar"><div class="sp-dot" style="background:#ff5f57"></div><div class="sp-dot" style="background:#febc2e;margin-left:6px"></div><div class="sp-dot" style="background:#28c840;margin-left:6px"></div><div style="margin-left:12px;font-size:.75rem;color:var(--gray)">voyager_dialogue_v1.script</div></div>${script.map(l=>`<div class="sp-row"><span class="sp-who ${l.w}">${l.w==='a'?'VOYAGER':'USER'}</span><span class="sp-text" style="white-space:pre-line">${l.t}</span></div>`).join('')}</div><div style="margin-top:16px"><button class="btn btn-red" onclick="markDone('script');nav('test')">Next: Test With Real Users →</button></div>`;
+  wrap.scrollIntoView({behavior:'smooth',block:'start'});
+}
+
+// ─── TEST ─────────────────────────────────────────────────────────────────────
+let tBuilt=false, activePersona=null, msgIdx={v:0,b:0,e:0}, triedPersonas=new Set(), chatMsgCount=0;
+
+const PERSONAS=[
+  {id:'v',label:'Maya — Vague Traveler',icon:'🌊',color:'var(--blue)',tag:'Undecided · Exploratory',
+   bio:'Maya is a 28-year-old taking her first solo trip. She has vacation time but no destination in mind. She types in short, exploratory messages and will disengage if asked too many questions at once.',
+   prompts:['I want to go somewhere warm','Not too expensive though','Maybe 5 or 6 nights?','I don\'t really know where I want to go'],
+   note:'Notice how Voyager handles incomplete information — does it ask one focused question or overwhelm Maya with a form? A vague user needs the agent to narrow the decision space for them.'},
+  {id:'b',label:'Marcus — Business Traveler',icon:'💼',color:'var(--teal)',tag:'Precise · Demanding',
+   bio:'Marcus is a VP who books 20+ trips per year. He gives exact dates, knows what he wants (business class, aisle, specific hotel), and has zero patience for unnecessary questions.',
+   prompts:['Business class JFK to LHR October 14 return 21','Marriott near Canary Wharf','I already said aisle seat','Just book it'],
+   note:'Watch what happens when Marcus gives complete information upfront. Does Voyager ask redundant questions? A good agent recognizes when it has enough and moves to action.'},
+  {id:'e',label:'Elena — Anxious First-Timer',icon:'🛫',color:'var(--purple)',tag:'Nervous · Needs Reassurance',
+   bio:'Elena is 23 and has never booked an international flight. She\'s nervous about getting things wrong — wrong airport, visa issues, lost bags. She asks lots of "what if" questions.',
+   prompts:['Is it safe to book now or should I wait?','What if I get the dates wrong?','Do I need a visa for Mexico?','What happens if I need to cancel?'],
+   note:'Notice whether Voyager provides reassurance alongside information. For anxious users, the emotional register matters as much as the content. Cold, factual responses amplify anxiety.'},
+];
+
+const VOYAGER_BANK={
+  v:['Where are you dreaming of going? Even just a vibe — beach, city, nature — helps me narrow it down 🌍',
+     'No worries, we can figure it out together! What matters more — the scenery or being totally off the grid?',
+     'Three warm-weather options pop up for November:\n🌴 Cancún, Mexico — $550–$800, direct 3.5h from most US cities\n🏝 Lisbon, Portugal — $700–$1,100, great weather, very walkable\n🌊 Bali, Indonesia — $900–$1,400, incredible value on the ground\n\nAny of these feel right?',
+     '5–6 nights is a great length for a first solo trip. I\'ll look at the best-value windows in November — shall I focus on Nov 8–14 or is the second half of the month better for you?',
+     'Let\'s start with one thing: beach destination or city exploration?'],
+  b:['On it — business class, JFK → LHR, Oct 14–21. Three options:\n\nOption A: BA 001 · Oct 14 11:00 · Direct 7h · $3,820\nOption B: AA 100 · Oct 14 08:30 · Direct 6.5h · $3,650\nOption C: VS 003 · Oct 14 19:00 · Direct 7h · $3,480\n\nI\'ll mark aisle on all three. Which works best?',
+     'Marriott Canary Wharf has availability Oct 14–21 from £289/night. Add to the same booking?',
+     'Locking in aisle seat across all three options — which flight do you prefer?',
+     'Booking now: BA 001 Oct 14, business class, aisle seat. Marriott Canary Wharf Oct 14–21.\n\nTotal: $3,820 + hotel. Confirm?'],
+  e:['Great question! Honestly, it depends: prices for November from the US tend to dip 6–8 weeks out, but if you see something under $700 now it\'s worth locking in — prices can go up just as easily. What route are you looking at?',
+     'Totally normal concern! Dates can always be changed before you confirm — I\'ll show you the fare rules (refundable vs non-refundable) before anything is locked, so you can choose how much flexibility you need.',
+     'For Mexico (Cancún, etc.), US citizens don\'t need a visa for tourism stays under 180 days 🇲🇽 You\'ll get a simple tourist card at the airport — no prep needed.',
+     'If you need to cancel, it depends on the fare type. I always surface the cancellation policy before you confirm — and I can recommend a fully flexible fare if you\'re not 100% sure of your dates. Would that peace of mind be worth the extra $80–$120?'],
+};
+
+function buildTest(){
+  tBuilt=true;
+  const selEl=document.getElementById('personaBtns');
+  PERSONAS.forEach(p=>{
+    const btn=document.createElement('button'); btn.className='btn-ghost';
+    btn.style.cssText='display:inline-flex;align-items:center;gap:7px;font-size:.84rem';
+    btn.innerHTML=`${p.icon} ${p.label}`;
+    btn.addEventListener('click',()=>selectPersona(p.id));
+    selEl.appendChild(btn);
+  });
+  appendMsg('agent','Hey there! Where are you dreaming of going? ✈️');
+}
+function selectPersona(id){
+  activePersona=id; triedPersonas.add(id);
+  const p=PERSONAS.find(x=>x.id===id);
+  document.getElementById('activeTag').textContent=p.tag;
+  document.getElementById('personaBio').innerHTML=`<div class="callout callout-tip" style="font-size:.86rem">${p.icon} <strong>${p.label}:</strong> ${p.bio}</div>`;
+  const inp=document.getElementById('chatInput');
+  inp.disabled=false; inp.placeholder=`Type as ${p.label.split('—')[0].trim()}…`;
+  document.getElementById('chatSend').disabled=false;
+  const qEl=document.getElementById('quickPrompts'); qEl.innerHTML='';
+  p.prompts.forEach(pr=>{
+    const b=document.createElement('button'); b.className='btn-ghost';
+    b.style.cssText='font-size:.76rem;padding:5px 11px';
+    b.textContent=pr;
+    b.addEventListener('click',()=>{inp.value=pr;resize(inp);});
+    qEl.appendChild(b);
+  });
+  if(triedPersonas.size>=2){
+    showTestNote(p.note);
+    document.getElementById('testNextBtn').style.display='inline-flex';
+    sectionScores.test={earned:Math.min(triedPersonas.size,3),possible:3};
+    markDone('test');
+  }
+}
+function showTestNote(note){
+  const el=document.getElementById('testNote');
+  el.style.display='block';
+  el.innerHTML=`<div class="callout callout-warn"><strong>🧪 Observation:</strong> ${note}</div>`;
+}
+async function sendMsg(){
+  const inp=document.getElementById('chatInput');
+  const msg=inp.value.trim(); if(!msg)return;
+  inp.value=''; resize(inp);
+  appendMsg('user',msg);
+  document.getElementById('chatSend').disabled=true;
+  const msgs=document.getElementById('chatMsgs');
+  const typing=document.createElement('div'); typing.className='msg agent'; typing.id='typing';
+  typing.innerHTML=`<div class="av">V</div><div class="typing show"><div class="td"></div><div class="td"></div><div class="td"></div></div>`;
+  msgs.appendChild(typing); msgs.scrollTop=msgs.scrollHeight;
+  await delay(800+Math.random()*500);
+  typing.remove();
+  const pid=activePersona||'v';
+  const bank=VOYAGER_BANK[pid];
+  const idx=msgIdx[pid]||0;
+  appendMsg('agent',bank[idx%bank.length]);
+  msgIdx[pid]=(idx+1);
+  document.getElementById('chatSend').disabled=false;
+  chatMsgCount++;
+  if(chatMsgCount>=3&&triedPersonas.size>=1){
+    const p=PERSONAS.find(x=>x.id===activePersona);
+    if(p) showTestNote(p.note);
+    document.getElementById('testNextBtn').style.display='inline-flex';
+    sectionScores.test={earned:Math.min(triedPersonas.size,3),possible:3};
+    markDone('test');
+  }
+}
+function appendMsg(role,text){
+  const msgs=document.getElementById('chatMsgs');
+  const div=document.createElement('div'); div.className='msg '+role;
+  div.innerHTML=`<div class="av">${role==='agent'?'V':'U'}</div><div class="bubble" style="white-space:pre-line">${text}</div>`;
+  msgs.appendChild(div); msgs.scrollTop=msgs.scrollHeight;
+}
+function enterSend(e){if(e.key==='Enter'&&!e.shiftKey){e.preventDefault();sendMsg();}}
+
+// ─── REFINE ───────────────────────────────────────────────────────────────────
+let rBuilt=false, rDone=new Set();
+
+const FEEDBACK=[
+  {id:'r1',title:'User abandoned at question 3',
+   quote:'"I just wanted to book a flight, not answer a survey."',
+   sentiment:'😤 Frustrated',sc:'var(--GA-red)',
+   context:'User sent 3 quick messages. Voyager asked one clarifying question per response — no results shown. User dropped off.',
+   q:'What is the root cause of this abandonment?',
+   opts:[
+     {k:'A',t:'Three questions is a reasonable number — the user was unreasonable.',c:false,fb:'Dismissing user frustration as unreasonable is the fastest path to bad product design. If users abandon at three questions, the design is wrong — not the users. Your job is to design for actual human behavior, not ideal behavior.'},
+     {k:'B',t:'Three consecutive turns of only questions (no value delivered) felt like an interrogation. Fix: show preliminary results by turn 2 and let the user\'s reaction to those results answer the open questions implicitly.',c:true,fb:'Correct. A pattern of consecutive question turns with no value delivery breaks the conversational contract. The agent should have surfaced preliminary results by turn 2. Seeing real prices answers budget questions. Seeing real destinations answers location questions. Show results early — let them do the work.'},
+     {k:'C',t:'Voyager should have asked all questions in one first message to get it over with.',c:false,fb:'Consolidating questions doesn\'t solve the interrogation problem — it concentrates it. Research shows users answer fewer questions the more appear at once. The fix is to show value earlier, not to front-load more questions.'},
+   ],
+   before:'What are your exact travel dates?\nHow many people are traveling?\nWhat is your budget range?',
+   after:'"I\'ll start a search while you think about dates — here\'s what Caribbean trips are running right now:\n\n🌴 Cancún from $520 (7 nights)\n🏝 Punta Cana from $480 (7 nights)\n\nFlexible on dates? I can find the cheapest window."'},
+  {id:'r2',title:'Confusion at option presentation',
+   quote:'"There are too many options and I don\'t know what\'s different between them."',
+   sentiment:'😕 Confused',sc:'var(--yellow)',
+   context:'Agent presented 6 flight options with full details for each. User responded with confusion and didn\'t book.',
+   q:'What dialogue design principle was violated?',
+   opts:[
+     {k:'A',t:'The agent should present 10+ options so users have maximum choice.',c:false,fb:'More options increase confusion, not reduce it. Beyond 3 options, decision quality and satisfaction both decline sharply. Curating is a core function of a conversational agent — if you present everything, you\'ve added no value over a search engine.'},
+     {k:'B',t:'The 3-option maximum was exceeded and each option lacked a clear identity. Users need to know why they\'d pick one over another at a glance — "cheapest," "fastest," "best value" — not a wall of equal-weight details.',c:true,fb:'Correct. Three options max, each with a clear differentiating identity. When every option looks equal but different, users can\'t decide. The agent\'s job is to frame the trade-off explicitly: "Do you want to save $175, or save 2 hours on the plane?"'},
+     {k:'C',t:'The user should have specified preferences before seeing any options.',c:false,fb:'Requiring complete preference specification before showing results is the frustrating traditional travel search experience. Show options first; let the user\'s reaction reveal their preferences organically.'},
+   ],
+   before:'Flight 1: AA3421, JFK-CUN Nov 8, 06:15, 1 stop ATL, 4.5h, $621\nFlight 2: DL2847, JFK-CUN Nov 8, 09:00, 1 stop MSP, 4.5h, $589\nFlight 3: B61822, JFK-CUN Nov 8, 11:00, Direct, 3.5h, $724\nFlight 4: AA3421, JFK-CUN Nov 9, 06:15, 1 stop, 4.5h, $598\nFlight 5: DL2847, JFK-CUN Nov 9, 09:00, 1 stop, 4.5h, $555\nFlight 6: B61822, JFK-CUN Nov 9, 11:00, Direct, 3.5h, $695',
+   after:'Three options for Cancún 🌴\n\n💰 Best price: Nov 9 · $555 · 1 stop · 4.5h\n⚡ Fastest: Nov 8 · $724 · Direct · 3.5h\n⚖️ Best value: Nov 8 · $589 · 1 stop · 4h\n\nWant the cheapest, or is a direct flight worth the extra $169?'},
+  {id:'r3',title:'Missed emotional cue — anxiety amplified',
+   quote:'"This feels so stressful, I don\'t know if I\'m doing this right."',
+   sentiment:'😰 Anxious',sc:'var(--purple)',
+   context:'Elena (anxious first-timer) asked three factual questions. Agent answered factually each time. User\'s anxiety escalated.',
+   q:'What did the agent miss?',
+   opts:[
+     {k:'A',t:'The agent\'s answers were correct — user anxiety is outside the agent\'s scope.',c:false,fb:'Dialogue design encompasses emotional register, not just information accuracy. An agent that gives correct answers in a tone that increases user anxiety has failed at its core job: helping the user complete a task. Emotional attunement is a design requirement.'},
+     {k:'B',t:'The agent answered the factual content but ignored the emotional signal. Anxious users need acknowledgment before information — "That\'s a really common concern!" changes the register of everything that follows.',c:true,fb:'Correct. Structure for anxious users: (1) acknowledge the emotion briefly, (2) provide the factual answer, (3) offer a concrete action that removes the uncertainty. Skipping step 1 makes the information feel clinical, which amplifies rather than relieves anxiety. One sentence of acknowledgment costs nothing and changes everything.'},
+     {k:'C',t:'The agent should have told Elena that travel isn\'t actually stressful.',c:false,fb:'Never contradict or dismiss a user\'s emotional state. Acknowledge it, then address it. "That\'s totally normal" validates without agreeing that the situation is objectively stressful.'},
+   ],
+   before:'For Mexico, US citizens don\'t need a visa for stays under 180 days. You\'ll receive a tourist card at the airport.',
+   after:'"Totally understandable — first international trips have a lot of moving parts! The good news: for Mexico, US citizens don\'t need a visa at all. You\'ll get a simple tourist card at the airport — no prep needed. Want me to flag any other things to know before you book?"'},
+  {id:'r4',title:'Re-asking a stated constraint',
+   quote:'"Why is it asking my budget again? I said $1,500 five messages ago."',
+   sentiment:'😡 Frustrated',sc:'var(--GA-red)',
+   context:'Marcus stated his budget upfront. The agent asked about budget again 5 turns later.',
+   q:'What systemic dialogue design failure caused this?',
+   opts:[
+     {k:'A',t:'The user should have repeated themselves — it\'s their responsibility to remind the agent.',c:false,fb:'Never. Placing the burden of context management on the user is a fundamental failure of conversational design. The agent must maintain and use every piece of context the user provides. Forgetting stated preferences is the #1 user frustration in conversational agents.'},
+     {k:'B',t:'The agent failed to persist context established in earlier turns. Once a user states a preference, it becomes permanent working memory — never ask for it again unless the user explicitly changes it.',c:true,fb:'Correct. Context persistence is a core dialogue contract. Everything the user shares belongs to the conversation forever until explicitly changed. The agent should only resurface prior context if something changed — and even then, acknowledge what it remembers: "You mentioned $1,500 earlier — still the ceiling?"'},
+     {k:'C',t:'The agent was being thorough — confirming details is always good practice.',c:false,fb:'There is a meaningful difference between confirming at booking time (appropriate) and re-asking questions mid-conversation (never appropriate). "Thoroughness" is not a valid justification for ignoring what the user already told you.'},
+   ],
+   before:'What\'s your budget for this trip?',
+   after:'"You mentioned $1,500 earlier — is that still the ceiling, or has anything changed?"'},
+];
+
+function buildRefine(){
+  rBuilt=true;
+  const el=document.getElementById('feedbackList');
+  FEEDBACK.forEach((item,i)=>{
+    const card=document.createElement('div'); card.className='fb-card'; card.id='fc-'+item.id;
+    card.innerHTML=`
+      <div style="font-size:.7rem;font-weight:700;letter-spacing:.12em;text-transform:uppercase;color:var(--gray-dk);margin-bottom:10px">Feedback Signal ${i+1} of 4</div>
+      <div class="fb-signal-row" style="flex-direction:column;gap:6px">
+        <div style="font-size:.78rem;font-weight:700;color:var(--gray-lt)">${item.title}</div>
+        <div class="fb-quote">"${item.quote}"</div>
+        <div style="display:flex;align-items:center;gap:10px;flex-wrap:wrap">
+          <span class="sentiment-badge" style="background:${item.sc}22;color:${item.sc}">${item.sentiment}</span>
+          <span style="font-size:.8rem;color:var(--gray-dk)">${item.context}</span>
+        </div>
+      </div>
+      <div class="fb-q">Diagnosis: ${item.q}</div>
+      <div id="fo-${item.id}"></div>
+      <div class="fb-fb" id="ff-${item.id}"></div>
+      <div id="fba-${item.id}" style="display:none">
+        <div style="font-size:.75rem;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:var(--gray-dk);margin:14px 0 8px">Before → After Rewrite</div>
+        <div class="ba-grid">
+          <div class="ba-box"><div class="ba-label" style="color:var(--GA-red)">❌ Before (Broken)</div><div class="ba-text">${item.before}</div></div>
+          <div class="ba-box"><div class="ba-label" style="color:var(--green)">✓ After (Fixed)</div><div class="ba-text">${item.after}</div></div>
+        </div>
+      </div>`;
+    const foEl=document.getElementById('fo-'+item.id);
+    const L=['A','B','C'];
+    item.opts.forEach((opt,oi)=>{
+      const btn=document.createElement('button'); btn.className='fb-opt';
+      btn.innerHTML=`<span class="nok">${L[oi]}</span><span>${opt.t}</span>`;
+      btn.addEventListener('click',()=>pickFeedback(item.id,oi,item));
+      foEl.appendChild(btn);
+    });
+    el.appendChild(card);
+  });
+}
+function pickFeedback(id,oi,item){
+  if(rDone.has(id))return; rDone.add(id);
+  const opt=item.opts[oi];
+  const L=['A','B','C'];
+  document.getElementById('fo-'+id).querySelectorAll('.fb-opt').forEach((b,j)=>{
+    b.classList.add('disabled');
+    if(item.opts[j].c) b.classList.add('correct');
+    else if(j===oi&&!opt.c) b.classList.add('wrong');
+  });
+  const fb=document.getElementById('ff-'+id);
+  fb.className='fb-fb show '+(opt.c?'ok':'bad');
+  fb.innerHTML=`<strong>${opt.c?'✓ Correct:':'Not quite:'}</strong> ${opt.fb}`;
+  document.getElementById('fba-'+id).style.display='block';
+  document.getElementById('fc-'+id).classList.add(opt.c?'done-ok':'done-bad');
+  sectionScores.refine={earned:[...rDone].filter(rid=>FEEDBACK.find(x=>x.id===rid)?.opts.some(o=>o.c&&FEEDBACK.find(x=>x.id===rid).opts.indexOf(o)===oi)).length,possible:4};
+  // simpler correct count
+  let correctCount=0;
+  [...rDone].forEach(rid=>{const itm=FEEDBACK.find(x=>x.id===rid);if(itm)correctCount++;});
+  sectionScores.refine={earned:correctCount,possible:4};
+  if(rDone.size>=4) document.getElementById('refineNext').style.display='block';
+}
+
+// ─── CANVAS ───────────────────────────────────────────────────────────────────
+let cBuilt=false, cSubmitted=false;
+const CANVAS=[
+  {id:'scope',label:'Agent Scope & Out-of-Scope',hint:'What can Voyager do? What does it explicitly defer? Be specific — this prevents scope creep in implementation.',placeholder:'Define what Voyager handles (flights, hotels, packages) and what it politely defers with alternatives (trains, visas, travel insurance)…'},
+  {id:'intents',label:'Intent Recognition & Clarification Rules',hint:'How does Voyager resolve vague inputs? List 3 common ambiguous patterns and the minimum clarification strategy for each.',placeholder:'Describe how Voyager handles vague geography, relative budget language, and flexible dates — with one-question maximum per turn…'},
+  {id:'options',label:'Option Presentation Format',hint:'Exactly how does Voyager present choices? How many? What dimensions? What format? Write the template.',placeholder:'Define the 3-option rule, the differentiating dimensions (cheapest/fastest/best value), and the exact formatting pattern with a closing refinement question…'},
+  {id:'recovery',label:'Error & Edge Case Recovery',hint:'What is the recovery pattern when Voyager can\'t fulfill a request? Write the three-part template.',placeholder:'Acknowledge limitation → provide useful alternative context (specific alternatives, price anchors) → offer a concrete forward path…'},
+  {id:'tone',label:'Tone & Persona Guidelines',hint:'Write 3 tone principles with one concrete example each showing the principle in action.',placeholder:'Example: "Acknowledge before inform — state one sentence of emotional acknowledgment before any factual answer when the user expresses stress or uncertainty." + example dialogue…'},
+];
+
+function buildCanvas(){
+  cBuilt=true;
+  const el=document.getElementById('canvasList');
+  CANVAS.forEach(s=>{
+    const div=document.createElement('div'); div.className='c-section'; div.id='cs-'+s.id;
+    div.innerHTML=`<div class="c-label">${s.label}</div><div class="c-hint">${s.hint}</div><textarea class="c-textarea" id="ct-${s.id}" placeholder="${s.placeholder}" oninput="checkCanvas('${s.id}')"></textarea>`;
+    el.appendChild(div);
+  });
+}
+function checkCanvas(id){
+  const val=document.getElementById('ct-'+id).value.trim();
+  const sec=document.getElementById('cs-'+id);
+  if(val.length>30) sec.classList.add('filled');
+  else sec.classList.remove('filled');
+}
+function submitCanvas(){
+  if(cSubmitted)return; cSubmitted=true;
+  let filled=0;
+  CANVAS.forEach(s=>{if(document.getElementById('ct-'+s.id).value.trim().length>30)filled++;});
+  sectionScores.canvas={earned:filled,possible:5};
+  const pct=Math.round(filled/5*100);
+  document.getElementById('canvasResult').style.display='block';
+  document.getElementById('canvasResult').innerHTML=`<div class="callout ${pct>=80?'callout-success':'callout-warn'}"><strong>${filled}/5 sections completed (${pct}%)</strong> — ${pct>=100?'Full canvas assembled. This is the spec your engineering and QA teams would use to implement and test Voyager\'s dialogue logic.':pct>=60?'Good start. Empty sections become interpretation gaps — engineers will fill them with their own assumptions, which rarely match the designer\'s intent.':'A canvas with empty sections is an incomplete spec. Every blank section is a guarantee of inconsistent implementation.'}</div>`;
+  document.getElementById('canvasSubmitBtn').style.display='none';
+  document.getElementById('canvasNextBtn').style.display='inline-flex';
+}
+
+// ─── MCQ HELPER ───────────────────────────────────────────────────────────────
+function renderMCQ(container,opts,onDone){
+  let answered=false;
+  opts.forEach((opt)=>{
+    const btn=document.createElement('button'); btn.className='mcq-opt';
+    btn.innerHTML=`<div class="opt-k">${opt.k}</div><div>${opt.text}</div>`;
+    btn.addEventListener('click',()=>{
+      if(answered)return; answered=true;
+      container.querySelectorAll('.mcq-opt').forEach((b,j)=>{
+        b.classList.add('disabled');
+        if(opts[j].ans) b.classList.add('correct');
+        else if(b===btn&&!opt.ans) b.classList.add('wrong');
+      });
+      const fb=document.createElement('div');
+      fb.className='mcq-fb show '+(opt.ans?'ok':'bad');
+      fb.innerHTML=`<strong>${opt.ans?'✓ Correct:':'Not quite:'}</strong> ${opt.fb}`;
+      container.appendChild(fb);
+      onDone(opt.ans);
+    });
+    container.appendChild(btn);
+  });
+}
+
+// ─── QUIZ ─────────────────────────────────────────────────────────────────────
+const QUESTIONS=[
+  {q:'A user says "I want to go somewhere in Europe, not too expensive, maybe in October." How many clarifying questions should Voyager ask before showing any results?',
+   opts:['Four: country, exact dates, budget number, and traveler count','One — the most ambiguous variable. Make reasonable assumptions on the rest and surface them in the results for the user to correct.','Zero — show all European options and let the user filter','Two: destination vibe and exact budget'],
+   ans:1,ok:'Correct. One question to narrow the most ambiguous variable (destination vibe in a whole continent). Budget and dates can be resolved reactively once the user sees real prices — showing results early is more informative than asking about budget in the abstract.',
+   bad:'Not quite. Ask the minimum needed to show useful results. One question on the most ambiguous variable, then show results. Let the user\'s reaction answer the remaining questions — seeing real prices and options is more efficient than a pre-search interrogation.'},
+  {q:'What is the maximum number of flight options a conversational agent should present in a single turn?',
+   opts:['As many as possible — users want maximum choice','10 — comprehensive but manageable','3 — each with a clear differentiating identity (cheapest, fastest, best value)','5 — enough for comparison without overwhelming'],
+   ans:2,ok:'Correct. Three options is the research-backed conversational ceiling. Each option needs a clear identity so the user knows why they\'d pick one over another at a glance. Beyond three, users experience choice paralysis or ask for help narrowing down — which means your presentation failed.',
+   bad:'Not quite. Three is the conversational maximum. Each option should have a distinct identity: cheapest, fastest, best value. If users can\'t tell the difference at a glance, the presentation has failed regardless of how many options are shown.'},
+  {q:'A user says "This feels so stressful, I don\'t know if I\'m doing this right." What should Voyager\'s next message do first?',
+   opts:['Immediately answer their most recent factual question — efficiency over feelings','Acknowledge the emotional signal with one brief sentence before delivering information ("Totally understandable — first trips have a lot of moving parts!")','Tell the user that travel booking is actually straightforward and not stressful','Ask the user to clarify what specifically is stressing them out'],
+   ans:1,ok:'Correct. Acknowledge before inform. Jumping straight to a factual answer when a user expresses distress feels dismissive and amplifies anxiety rather than relieving it. One sentence of acknowledgment changes the entire emotional register — it costs nothing and prevents escalation.',
+   bad:'Not quite. Emotional attunement is a design requirement, not optional. When a user expresses a feeling, the agent must acknowledge it before delivering information. Skipping acknowledgment makes the response feel cold — which increases anxiety for users in this state.'},
+  {q:'A user explicitly stated their $1,500 budget six turns ago. They haven\'t mentioned it since. Should the agent ask about budget again?',
+   opts:['Yes — it\'s good practice to confirm details before making recommendations','Yes — the user may have changed their mind after several turns','No — stated constraints persist through the entire conversation. The agent should use $1,500 until the user explicitly changes it. If clarification is needed, surface what it remembers: "You mentioned $1,500 — still the ceiling?"','No — the agent should never mention budget again once it\'s been stated'],
+   ans:2,ok:'Correct. Context persistence is a core dialogue contract. Every stated preference and constraint is part of the conversation\'s working memory until explicitly changed. Re-asking for it signals the agent isn\'t listening — and is the #1 frustration signal in conversational agent user research.',
+   bad:'Not quite. Stated constraints persist. The agent must carry forward everything the user has shared. If clarification is ever needed, surface the memory rather than re-asking: "You mentioned $1,500 earlier — is that still right?" This signals intelligence, not forgetfulness.'},
+  {q:'What is the correct three-part error recovery pattern when Voyager can\'t fulfill a request?',
+   opts:['"Error: service not available."','Silently redirect to a related topic without acknowledging the failure','Acknowledge the limitation → provide useful alternative context (specific options, price anchors) → offer a concrete forward path','"I can only book flights and hotels. Please use a different service."'],
+   ans:2,ok:'Correct. The three parts are essential as a unit. Acknowledging alone is insufficient. Redirecting without context is dismissive. Offering a forward path without context leaves the user uninformed. All three together keep the user engaged and moving toward their goal.',
+   bad:'Not quite. Good error recovery has three parts: acknowledge limitation + provide genuinely useful context + offer a specific forward path. Users tolerate agent limitations gracefully when the agent stays helpful — dead ends and cold redirects break trust irreparably.'},
+  {q:'What does "progressive disclosure" mean in conversational interface design?',
+   opts:['Showing all available information upfront so the user never has to ask for more','Revealing information in layers as needed — start with the three best options, drill into detail only when the user\'s reaction indicates they want it','Requiring users to disclose all preferences before showing any results','Progressively asking harder clarifying questions as the conversation deepens'],
+   ans:1,ok:'Correct. Progressive disclosure treats user reactions as navigation. Show three options. If the user says "show me more," surface the next layer. If they ask about business class, expand to that. The conversation guides depth — the user\'s curiosity is the navigation mechanism, not a pre-defined question sequence.',
+   bad:'Not quite. Progressive disclosure means starting with what the user needs to make a first decision, not everything they might ever need. Each interaction reveals the next appropriate layer of detail. This prevents cognitive overload while keeping the conversation moving forward.'},
+  {q:'Why should a pre-booking confirmation message surface the non-refundable fare flag specifically?',
+   opts:['It\'s a legal requirement in all jurisdictions','Users frequently complete booking without reading full confirmation walls — the non-refundable flag is the detail most commonly complained about "not knowing" post-booking. Surfacing it prevents post-booking disputes and builds trust.','It\'s the most expensive aspect of the booking','Non-refundable fares are always cheaper and users should be encouraged to choose them'],
+   ans:1,ok:'Correct. Confirmation design is about surfacing what matters, not everything. Non-refundable policies are the #1 source of post-booking complaints in travel — users click through confirmation walls without reading. A well-designed confirmation highlights this single flag explicitly so it can\'t be missed.',
+   bad:'Not quite. The purpose of a confirmation is to surface decision-critical information before an irreversible action. Non-refundable is the detail users most often claim they "didn\'t know" — because it gets buried in confirmation walls that no one reads fully. Highlight it explicitly so it can\'t be missed.'},
+];
+
+let qIdx=0,qScore=0,qStarted=false,qAnswered=false;
+function initQuiz(){qStarted=true;qIdx=0;qScore=0;showQ();}
+function showQ(){
+  qAnswered=false;
+  const q=QUESTIONS[qIdx];
+  document.getElementById('qProg').style.width=(qIdx/QUESTIONS.length*100)+'%';
+  document.getElementById('qMeta').textContent=`Question ${qIdx+1} of ${QUESTIONS.length}`;
+  document.getElementById('qScoreTxt').textContent=`Score: ${qScore} / ${qIdx}`;
+  document.getElementById('quizQ').textContent=q.q;
+  document.getElementById('quizFB').className='fb-box'; document.getElementById('quizFB').innerHTML='';
+  document.getElementById('qNextBtn').style.display='none';
+  const L=['A','B','C','D'];
+  document.getElementById('quizOpts').innerHTML=q.opts.map((o,i)=>
+    `<button class="q-opt" onclick="answerQ(${i})"><div class="q-opt-k">${L[i]}</div>${o}</button>`
+  ).join('');
+}
+function answerQ(i){
+  if(qAnswered)return; qAnswered=true;
+  const q=QUESTIONS[qIdx]; const ok=i===q.ans; if(ok)qScore++;
+  document.querySelectorAll('.q-opt').forEach((el,idx)=>{
+    el.classList.add('disabled');
+    if(idx===q.ans) el.classList.add('correct');
+    else if(idx===i&&!ok) el.classList.add('wrong');
+  });
+  const fb=document.getElementById('quizFB');
+  fb.innerHTML=`<span style="font-size:1.1rem;flex-shrink:0">${ok?'✓':'✗'}</span><span>${ok?q.ok:q.bad}</span>`;
+  fb.className='fb-box show '+(ok?'ok':'bad');
+  document.getElementById('qScoreTxt').textContent=`Score: ${qScore} / ${qIdx+1}`;
+  document.getElementById('qNextBtn').style.display='inline-flex';
+  if(qIdx===QUESTIONS.length-1) document.getElementById('qNextBtn').textContent='See Results →';
+}
+function nextQ(){qIdx++; if(qIdx>=QUESTIONS.length){showQuizDone();return;} showQ();}
+function showQuizDone(){
+  document.getElementById('quizActive').style.display='none';
+  document.getElementById('quizDone').style.display='block';
+  const pct=Math.round(qScore/QUESTIONS.length*100);
+  sectionScores.quiz={earned:qScore,possible:QUESTIONS.length};
+  document.getElementById('qBadge').innerHTML=`<span style="background:${pct>=70?'rgba(34,197,94,.15)':'rgba(232,51,58,.15)'};color:${pct>=70?'var(--green)':'var(--GA-red)'};padding:3px 10px;border-radius:20px;font-size:.85rem;font-weight:700">${qScore}/${QUESTIONS.length} · ${pct}%</span>`;
+  document.getElementById('qMsg').textContent=pct>=70
+    ?`${pct}% — strong dialogue design instincts. You understand how to balance gathering information with delivering value.`
+    :`${pct}% — revisit the Script and Refine sections. Core principles: one question per turn, show value early, never re-ask stated constraints, acknowledge emotion before information.`;
+  if(pct>=70) markDone('quiz');
+}
+
+// ─── RESULTS ──────────────────────────────────────────────────────────────────
+function buildResults(){
+  const scoreMap=[
+    {label:'Intent Mapping',     e:sectionScores.intents?.earned||0,p:1},
+    {label:'Script Design',      e:sectionScores.script?.earned||0, p:5},
+    {label:'Persona Testing',    e:sectionScores.test?.earned||0,   p:3},
+    {label:'Feedback Refinement',e:sectionScores.refine?.earned||0, p:4},
+    {label:'Design Canvas',      e:sectionScores.canvas?.earned||0, p:5},
+    {label:'Knowledge Check',    e:sectionScores.quiz?.earned||0,   p:7},
+  ];
+  const te=scoreMap.reduce((s,x)=>s+x.e,0);
+  const tp=scoreMap.reduce((s,x)=>s+x.p,0);
+  const pct=tp>0?Math.round(te/tp*100):0;
+  const grade=pct>=90?{l:'Dialogue Architect',  e:'💬',m:'Exceptional conversational design — intent mapping, scripting, testing, and refinement all executed with precision.'}
+             :pct>=70?{l:'Conversation Designer',e:'✍️', m:'Strong foundations. Review the script nodes and feedback signals you missed.'}
+             :pct>=50?{l:'UX Writer Apprentice', e:'📝',m:'Good instincts — revisit the Script and Refine sections to deepen the principles.'}
+                     :{l:'Explorer',             e:'🔍',m:'Start from the Brief — the principles build sequentially.'};
+  const circ=2*Math.PI*52,dash=circ*(1-pct/100);
+  const rows=scoreMap.map(item=>{
+    const p=item.p>0?Math.round(item.e/item.p*100):0;
+    const col=p>=80?'var(--green)':p>=50?'var(--yellow)':'var(--GA-red)';
+    return `<div class="score-row">
+      <div style="width:8px;height:8px;border-radius:50%;background:${col};flex-shrink:0"></div>
+      <span style="flex:1;font-size:.9rem;font-weight:500;color:var(--gray-lt)">${item.label}</span>
+      <div class="score-bar-wrap"><div class="score-bar-fill" style="width:${p}%;background:${col}"></div></div>
+      <span style="font-size:.82rem;color:var(--gray);min-width:38px;text-align:right">${item.e}/${item.p}</span>
+      <span style="background:${p>=80?'rgba(34,197,94,.15)':p>=50?'rgba(245,197,24,.15)':'rgba(232,51,58,.15)'};color:${col};padding:3px 10px;border-radius:20px;font-size:11px;font-weight:700;min-width:40px;text-align:center">${p}%</span>
+    </div>`;
+  }).join('');
+  const takeaways=[
+    'One question per turn is a conversation — multiple questions is an interrogation. The most common failure in conversational AI design is front-loading every clarifying question before showing any value. Show results early; let user reactions answer the questions you didn\'t ask. A user who sees "$480–$900 for that route" answers the budget question without being asked.',
+    'Emotional register is a design requirement, not a nice-to-have. An agent that gives correct answers in the wrong tone can worsen the user experience relative to no agent at all. One sentence of acknowledgment before a factual answer ("Totally normal concern!") changes the entire character of the response — it costs nothing and prevents escalation for anxious users.',
+    'Context persistence is a contract. When a user tells your agent something, that information belongs to the conversation permanently until explicitly changed. Re-asking for stated constraints is the fastest path to user frustration. Great dialogue designers treat the shared context like a whiteboard — what\'s written stays visible to both parties throughout.',
+  ].map((t,i)=>`<div class="tk-item"><div class="tk-num">0${i+1}</div><div class="tk-txt">${t}</div></div>`).join('');
+  document.getElementById('resultsBody').innerHTML=`
+    <div style="display:flex;align-items:center;gap:28px;flex-wrap:wrap;padding-bottom:36px;border-bottom:1px solid var(--line);margin-bottom:32px">
+      <div class="results-ring">
+        <svg width="120" height="120" style="transform:rotate(-90deg)" viewBox="0 0 120 120">
+          <circle cx="60" cy="60" r="52" fill="none" stroke="var(--black3)" stroke-width="8"/>
+          <circle cx="60" cy="60" r="52" fill="none" stroke="var(--GA-red)" stroke-width="8"
+            stroke-dasharray="${circ.toFixed(1)}" stroke-dashoffset="${dash.toFixed(1)}"
+            stroke-linecap="round" style="transition:stroke-dashoffset 1.2s ease"/>
+        </svg>
+        <div class="results-ring-txt"><div class="ring-pct">${pct}%</div><div class="ring-sub">score</div></div>
+      </div>
+      <div>
+        <div style="font-size:2rem;margin-bottom:4px">${grade.e}</div>
+        <h2 style="font-size:clamp(2rem,5vw,2.8rem);margin-bottom:6px">${grade.l}</h2>
+        <p style="color:var(--gray-lt);font-size:.95rem">${grade.m}</p>
+        <p style="color:var(--gray-dk);font-size:.82rem;margin-top:6px;font-family:'JetBrains Mono',monospace">${te} pts earned · ${tp} pts possible</p>
+      </div>
+    </div>
+    <span class="eyebrow">Score Breakdown</span>
+    <div class="card" style="padding:8px 20px;margin-bottom:28px">${rows}</div>
+    <span class="eyebrow">Key Takeaways</span>
+    <div class="card" style="padding:8px 20px;margin-bottom:24px">${takeaways}</div>
+    <div style="background:rgba(34,197,94,.06);border:1px solid rgba(34,197,94,.2);border-radius:var(--r-lg);padding:20px">
+      <p style="font-size:.92rem;color:var(--gray-lt);line-height:1.7">
+        🎉 <strong style="color:#fff">Dialogue Design complete.</strong><br/>
+        You mapped 5 user intents, designed a 5-node conversational script, tested across 3 personas, diagnosed 4 feedback signals, and assembled a full design canvas. That's a complete conversational interface specification.<br/><br/>
+        Next module: <strong style="color:#fff">Agent Evaluation &amp; Testing</strong> — systematic methods for measuring agent performance in production.
+      </p>
+    </div>`;
+}
+</script>
+</body>
+</html>

@@ -466,4 +466,4 @@ https://pages.git.generalassemb.ly/Build-AI-Agents/Agent-UX-and-Interaction/
 
 ---
 
-*General Assembly · Build AI Agents · BAA 16.0 · © 2026*
+*General Assembly · Build AI Agents · BAA 12.0 · © 2026*

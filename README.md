@@ -462,3 +462,8 @@ https://pages.git.generalassemb.ly/Build-AI-Agents/Agent-UX-and-Interaction/
 - [Microsoft — Conversation Design for Bots](https://learn.microsoft.com/en-us/azure/bot-service/bot-service-design-principles)
 - Erika Hall — *Conversational Design* (A Book Apart, 2018)
 - [Voiceflow — Conversation Design Best Practices](https://www.voiceflow.com/blog/conversation-design)
+
+
+---
+
+*General Assembly · Build AI Agents · BAA 16.0 · © 2026*

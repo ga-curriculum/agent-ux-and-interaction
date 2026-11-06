@@ -441,7 +441,7 @@ Every UX refinement should follow this pattern:
 
 ## 5. Lab (60 min)
 
-https://pages.git.generalassemb.ly/Build-AI-Agents/Agent-UX-and-Interaction/
+https://ga-curriculum.github.io/agent-ux-and-interaction/
 
 ---
 
